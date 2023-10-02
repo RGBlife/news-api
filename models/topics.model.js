@@ -6,6 +6,10 @@ exports.fetchTopics = async () => {
     const { rows } = await db.query(baseQuery);
     return rows;
   } catch (error) {
-    console.log("err at model: ", err);
+    console.log("err at model: ", error);
   }
+};
+
+exports.fetchApiInfo = async () => {
+  const apiInfo = await res.status(200).send(apiInfo);
 };
