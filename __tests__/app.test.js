@@ -39,3 +39,68 @@ describe("Error controllers", () => {
     expect(msg).toBe("Path not found.");
   });
 });
+
+
+// describe("GET /api/articles/:article_id", () => {
+//   test("Should return a 200 status", async () => {
+//     const { status } = await request(app).get("/api/articles/3");
+//     expect(status).toBe(200);
+//   });
+//   test("Should return an array of the object article requested by id", async () => {
+//     const {
+//       body: { articles },
+//     } = await request(app).get("/api/articles/3");
+//     const expected =   {
+//       article_id: 3,
+//       title: "Eight pug gifs that remind me of mitch",
+//       topic: "mitch",
+//       author: "icellusedkars",
+//       body: "some gifs",
+//       created_at: 1604394720000,
+//       article_img_url:
+//         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+//     },
+
+//     expect(typeof articles).toBe("object");
+//     expect(articles[0]).toEqual(expected);
+//     expect(articles).toHaveLength(1);
+//   });
+//   test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
+//     const {
+//       body: { articles },
+//     } = await request(app).get("/api/articles/9999");
+//     const expected =   {
+//       article_id: 3,
+//       title: "Eight pug gifs that remind me of mitch",
+//       topic: "mitch",
+//       author: "icellusedkars",
+//       body: "some gifs",
+//       created_at: 1604394720000,
+//       article_img_url:
+//         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+//     },
+
+//     expect(typeof articles).toBe("object");
+//     expect(articles[0]).toEqual(expected);
+//     expect(articles).toHaveLength(1);
+//   });
+//   test("Returns a status and error message when given an invalid article id", async () => {
+//     const {
+//       body: { articles },
+//     } = await request(app).get("/api/articles/JELLY");
+//     const expected =   {
+//       article_id: 3,
+//       title: "Eight pug gifs that remind me of mitch",
+//       topic: "mitch",
+//       author: "icellusedkars",
+//       body: "some gifs",
+//       created_at: 1604394720000,
+//       article_img_url:
+//         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+//     },
+
+//     expect(typeof articles).toBe("object");
+//     expect(articles[0]).toEqual(expected);
+//     expect(articles).toHaveLength(1);
+//   });
+// });
