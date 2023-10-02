@@ -29,7 +29,7 @@ describe("GET /api/topics", () => {
     expect(topics).toHaveLength(3);
   });
 });
-describe.only("GET /api", () => {
+describe("GET /api", () => {
   test("Should return the API structure", async () => {
     const { body } = await request(app).get("/api").expect(200);
     expect(body).toEqual(apiInfo);
