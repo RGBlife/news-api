@@ -20,7 +20,7 @@ exports.apiInfo = {
     description: "serves an array of an article",
     queries: [],
     exampleResponse: {
-      topics: [
+      article: [
         {
           article_id: 3,
           title: "Eight pug gifs that remind me of mitch",
@@ -41,7 +41,7 @@ exports.apiInfo = {
       "serves an array of articles sorted by created_at descending and addition of comment count with body property removed",
     queries: [],
     exampleResponse: {
-      topics: [
+      articles: [
         {
           author: "icellusedkars",
           title: "Eight pug gifs that remind me of mitch",
@@ -68,4 +68,27 @@ exports.apiInfo = {
     },
     requiredBodyFormat: {},
   },
+
+  "POST /api/articles/:article_id/comments": {
+    description:
+      "Inserts a new comment for the specified article and returns the inserted comment.",
+    queries: [],
+    exampleResponse: {
+      comment: [
+        {
+          comment_id: 17,
+          votes: 20,
+          created_at: "2020-03-14 17:02:00",
+          author: "icellusedkars",
+          body: "The owls are not what they seem.",
+          article_id: 9,
+        },
+      ],
+    },
+    requiredBodyFormat: {
+      author: "string",
+      body: "string",
+    },
+  },
+
 };

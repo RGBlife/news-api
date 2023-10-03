@@ -159,3 +159,124 @@ describe("GET /api/articles", () => {
     expect(msg).toBe("Path not found.");
   });
 });
+
+// describe.only("POST /api/articles/:article_id/comments", () => {
+
+//   const posted = [
+//     {
+//       author: "butter_bridge",
+//       body: "Amazing!",
+//     },
+//     {
+//       author: "butter_bridge",
+//       body: "Wow wow wow!",
+//     },
+//   ];
+
+//   test("Should return a 201 status", async () => {
+//     const response = await request(app).post("/api/articles/9/comments");
+//     expect(response.status).toBe(200);
+//   });
+
+//   test("Should return an Array which contains comment objects", async () => {
+//     const response = await request(app).post("/api/articles/9/comments");
+//     const { comments } = response.body;
+//     expect(Array.isArray(comments[0])).toBe(false);
+//     expect(Array.isArray(comments)).toBe(true);
+//   });
+//   test("Should return an Array of objects with the correct keys", async () => {
+//     const response = await request(app).post("/api/articles/9/comments");
+//     const { comments } = response.body;
+//     const correctStructure = comments.every((comment) => {
+//       return Object.keys(expected).every((key) => {
+//         return comment.hasOwnProperty(key);
+//       });
+//     });
+
+//     const expected = {
+//       comment_id: 17,
+//       votes: 20,
+//       created_at: "2020-03-14 17:02:00",
+//       author: "icellusedkars",
+//       body: "The owls are not what they seem.",
+//       article_id: 9,
+//     };
+
+//     expect(correctStructure).toBe(true);
+//   });
+
+//   test("Comment objects should have the correct types", async () => {
+//     const response = (await request(app).post("/api/articles/9/comments")).post(posted)
+//     const { comments } = response.body;
+//     comments.forEach((comment) => {
+//       expect(typeof comment.comment_id).toBe("number");
+//       expect(typeof comment.votes).toBe("number");
+//       expect(typeof comment.created_at).toBe("string");
+//       expect(typeof comment.author).toBe("string");
+//       expect(typeof comment.body).toBe("string");
+//       expect(typeof comment.article_id).toBe("number");
+//     });
+//   });
+//   test("Comment objects should have the correct types", async () => {
+//     const response = await request(app).post("/api/articles/9/comments");
+//     const { comments } = response.body;
+//     comments.forEach((comment) => {
+//       expect(typeof comment.comment_id).toBe("number");
+//       expect(typeof comment.votes).toBe("number");
+//       expect(typeof comment.created_at).toBe("string");
+//       expect(typeof comment.author).toBe("string");
+//       expect(typeof comment.body).toBe("string");
+//       expect(typeof comment.article_id).toBe("number");
+//     });
+//   });
+
+//   test("Should return an array of comments", async () => {
+//     const {
+//       body: { comments },
+//     } = await request(app).post("/api/articles/9/comments");
+
+    
+
+//     const expected = {
+//       comment_id: 17,
+//       votes: 20,
+//       created_at: "2020-03-14 17:02:00",
+//       author: "icellusedkars",
+//       body: "The owls are not what they seem.",
+//       article_id: 9,
+//     };
+
+//     const correctStructure = comments.every((comment) => {
+//       return Object.keys(expected).every((key) => {
+//         return comment.hasOwnProperty(key);
+//       });
+//     });
+//     console.log(data);
+
+//     comments.forEach((comment) => {
+//       expect(typeof comment.comment_id).toBe("number");
+//       expect(typeof comment.votes).toBe("number");
+//       expect(typeof comment.created_at).toBe("string");
+//       expect(typeof comment.author).toBe("string");
+//       expect(typeof comment.body).toBe("string");
+//       expect(typeof comment.article_id).toBe("number");
+//     });
+
+//     expect(correctStructure).toBe(true);
+//     expect(Array.isArray(comments)).toBe(true);
+//     expect(Array.isArray(comments[0])).toBe(false);
+//     // expect(comments).toHaveLength(13);
+//     // expect(comments).toBeSorted({ key: "created_at", descending: true });
+//   });
+//   test("Should return a 404 status if path doesn't exist", async () => {
+//     const {
+//       status,
+//       body: { msg },
+//     } = await request(app).get("/api/HELLO");
+//     expect(status).toBe(404);
+//     expect(msg).toBe("Path not found.");
+//   });
+//   // Tests to do
+//   // 1. Check that the author in article id matches the author provided in the body post
+//   // 2.
+// });
