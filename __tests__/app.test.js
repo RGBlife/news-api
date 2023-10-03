@@ -148,10 +148,10 @@ describe("GET /api/articles/:article_id", () => {
 //   });
 //   test("Returns a 200 status and empty comment when given an a valid article id but it has no comments", async () => {
 //     const {
-//       body: { msg },
-//     } = await request(app).get("/api/articles/JELLY/comments").expect(400);
-//     const expected = "Bad request";
+//       body: { comments },
+//     } = await request(app).get("/api/articles/7/comments").expect(200);
+//     const expected = [{}];
 
-//     expect(msg).toBe(expected);
+//     expect(comments).toBe(expected);
 //   });
 // });
