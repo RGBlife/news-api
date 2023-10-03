@@ -104,6 +104,66 @@ describe("GET /api/articles/:article_id", () => {
     expect(msg).toBe(expected);
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("Should return a 200 status", async () => {
+    const { status } = await request(app).get("/api/articles/1/comments");
+    expect(status).toBe(200);
+  });
+
+  test("Should return an array of comments requested by article id", async () => {
+    const {
+      body: { articleComments },
+    } = await request(app).get("/api/articles/1/comments");
+    const expected = {
+      comment_id: 9,
+      votes: 0,
+      created_at: "2020-01-01T03:08:00.000Z",
+      author: "icellusedkars",
+      body: "Superficially charming",
+      article_id: 1,
+    };
+
+    articleComments.forEach((comment) => {
+      expect(typeof comment.comment_id).toBe("number");
+      expect(typeof comment.votes).toBe("number");
+      expect(typeof comment.created_at).toBe("string");
+      expect(typeof comment.author).toBe("string");
+      expect(typeof comment.body).toBe("string");
+      expect(typeof comment.article_id).toBe("number");
+    });
+
+    expect(articleComments[0]).toEqual(expected);
+    expect(articleComments).toHaveLength(11);
+  });
+
+  test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
+    const response = await request(app)
+      .get("/api/articles/9999/comments")
+      .expect(404);
+    const expected = "article does not exist";
+
+    expect(response.body.msg).toBe(expected);
+  });
+
+  test("Returns a status and error message when given an invalid article id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/articles/JELLY/comments").expect(400);
+    const expected = "Bad request";
+
+    expect(msg).toBe(expected);
+  });
+  test("Returns a 200 status and empty array when given an a valid article id but it has no comments", async () => {
+    const {
+      body: { articleComments },
+    } = await request(app).get("/api/articles/7/comments").expect(200);
+    const expected = [];
+
+    expect(articleComments).toEqual(expected);
+  });
+});
+
 describe("GET /api/articles", () => {
   test("Should return a 200 status", async () => {
     const { status } = await request(app).get("/api/articles");
@@ -144,8 +204,6 @@ describe("GET /api/articles", () => {
     });
 
     expect(correctStructure).toBe(true);
-    expect(Array.isArray(articles)).toBe(true);
-    expect(Array.isArray(articles[0])).toBe(false);
     expect(articles[0]).toEqual(expected);
     expect(articles).toHaveLength(13);
     expect(articles).toBeSorted({ key: "created_at", descending: true });

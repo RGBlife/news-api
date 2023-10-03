@@ -7,6 +7,7 @@ exports.fetchTopics = async () => {
     return rows;
   } catch (error) {
     console.log("err at model: ", error);
+    throw error
   }
 };
 

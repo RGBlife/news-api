@@ -1,4 +1,5 @@
 const { getTopics } = require("./controllers/topics.controller");
+const { getCommentsByArticleId } = require("./controllers/comments.controller");
 const {
   pathNotFoundError,
   handleCustomErrors,
@@ -18,6 +19,8 @@ app.get("/api/topics", getTopics);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.get("/api", (req, res, next) => {
   res.status(200).send({ apiInfo });

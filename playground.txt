@@ -1,4 +1,33 @@
 You are now connected to database "nc_news_test" as user "personalcomputer".
+                                                 List of databases
+            Name            |      Owner       | Encoding | Collate | Ctype |           Access privileges           
+----------------------------+------------------+----------+---------+-------+---------------------------------------
+ daves_snack_drawer         | personalcomputer | UTF8     | C       | C     | 
+ italian_recipe_db          | personalcomputer | UTF8     | C       | C     | 
+ marvel                     | personalcomputer | UTF8     | C       | C     | 
+ mitchs_rare_treasures      | personalcomputer | UTF8     | C       | C     | 
+ mitchs_rare_treasures_test | personalcomputer | UTF8     | C       | C     | 
+ my_bookshop                | personalcomputer | UTF8     | C       | C     | 
+ nc_news                    | personalcomputer | UTF8     | C       | C     | 
+ nc_news_test               | personalcomputer | UTF8     | C       | C     | 
+ personalcomputer           | personalcomputer | UTF8     | C       | C     | 
+ postgres                   | personalcomputer | UTF8     | C       | C     | 
+ template0                  | personalcomputer | UTF8     | C       | C     | =c/personalcomputer                  +
+                            |                  |          |         |       | personalcomputer=CTc/personalcomputer
+ template1                  | personalcomputer | UTF8     | C       | C     | =c/personalcomputer                  +
+                            |                  |          |         |       | personalcomputer=CTc/personalcomputer
+ theme_parks                | personalcomputer | UTF8     | C       | C     | 
+(13 rows)
+
+              List of relations
+ Schema |   Name   | Type  |      Owner       
+--------+----------+-------+------------------
+ public | articles | table | personalcomputer
+ public | comments | table | personalcomputer
+ public | topics   | table | personalcomputer
+ public | users    | table | personalcomputer
+(4 rows)
+
  slug  |          description           
 -------+--------------------------------
  mitch | The man, the Mitch, the legend
@@ -53,6 +82,15 @@ You are now connected to database "nc_news_test" as user "personalcomputer".
          18 | This morning, I showered for nine minutes.                                                                                                                                           |          1 | butter_bridge |    16 | 2020-07-21 01:20:00
 (18 rows)
 
+<<<<<<< HEAD
+ comment_id | votes | created_at | author | body | article_id 
+------------+-------+------------+--------+------+------------
+(0 rows)
+
+ article_id | title | topic | author | body | created_at | votes | article_img_url 
+------------+-------+-------+--------+------+------------+-------+-----------------
+(0 rows)
+=======
     author     |                     title                     | article_id | topic |     created_at      | votes |                                            article_img_url                                            | comment_count 
 ---------------+-----------------------------------------------+------------+-------+---------------------+-------+-------------------------------------------------------------------------------------------------------+---------------
  icellusedkars | Eight pug gifs that remind me of mitch        |          3 | mitch | 2020-11-03 09:12:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             2
@@ -78,4 +116,5 @@ You are now connected to database "nc_news_test" as user "personalcomputer".
  icellusedkars | Am I a cat?                                            |         11 | mitch | 2020-01-15 22:21:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
  icellusedkars | Z                                                      |          7 | mitch | 2020-01-07 14:08:00 |     0 | https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700 |             0
 (13 rows)
+>>>>>>> main
 
