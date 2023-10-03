@@ -3,6 +3,7 @@ const app = require("../app");
 const connection = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data");
+const apiInfo = require("../db/data/docs/api-docs");
 
 beforeEach(() => {
   return seed(data);
@@ -26,6 +27,23 @@ describe("GET /api/topics", () => {
     expect(typeof topics).toBe("object");
     expect(topics[0]).toEqual(expected);
     expect(topics).toHaveLength(3);
+  });
+});
+describe("GET /api", () => {
+  test("Should return the API structure", async () => {
+    const { body } = await request(app).get("/api").expect(200);
+    expect(body).toEqual(apiInfo);
+  });
+  test("The properties of each API endpoint has description, queries, exampleResponse and requiredBodyFormat", () => {
+    for (const key in apiInfo) {
+      for (const innerKey in apiInfo[key]) {
+        expect(typeof apiInfo[key][innerKey].description).toBe("string");
+        expect(apiInfo[key][innerKey].description.length).toBeGreaterThan(0);
+        expect(Array.isArray(apiInfo[key][innerKey].queries)).toBe(true);
+        expect(typeof apiInfo[key][innerKey].exampleResponse).toBe("object");
+        expect(typeof apiInfo[key][innerKey].requiredBodyFormat).toBe("object");
+      }
+    }
   });
 });
 
