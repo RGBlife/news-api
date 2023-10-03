@@ -30,13 +30,7 @@ FROM
     articles AS a
     LEFT JOIN comments AS c ON c.article_id = a.article_id
 GROUP BY
-    a.author,
-    a.title,
-    a.article_id,
-    a.topic,
-    a.created_at,
-    a.votes,
-    a.article_img_url
+    a.article_id
 ORDER BY
     a.created_at DESC;`;
     const { rows } = await db.query(baseQuery);

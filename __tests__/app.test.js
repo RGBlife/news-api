@@ -112,7 +112,7 @@ describe("GET /api/articles", () => {
 
   test("Should return an array of articles", async () => {
     const {
-      body: { article },
+      body: { articles },
     } = await request(app).get("/api/articles");
     const expected = {
       author: "icellusedkars",
@@ -126,11 +126,18 @@ describe("GET /api/articles", () => {
       comment_count: "2",
     };
 
-    expect(Array.isArray(article)).toBe(true);
-    expect(Array.isArray(article[0])).toBe(false);
-    expect(article[0]).toEqual(expected);
-    expect(article).toHaveLength(13);
-    expect(article).toBeSorted({ key: "created_at", descending: true });
+    const correctStructure = articles.every((article) => {
+      return Object.keys(expected).every((key) => {
+        return article.hasOwnProperty(key);
+      })
+    });
+
+    expect(correctStructure).toBe(true);
+    expect(Array.isArray(articles)).toBe(true);
+    expect(Array.isArray(articles[0])).toBe(false);
+    expect(articles[0]).toEqual(expected);
+    expect(articles).toHaveLength(13);
+    expect(articles).toBeSorted({ key: "created_at", descending: true });
   });
   test("Should return a 404 status if path doesn't exist", async () => {
     const {
