@@ -40,67 +40,48 @@ describe("Error controllers", () => {
   });
 });
 
+describe("GET /api/articles/:article_id", () => {
+  test("Should return a 200 status", async () => {
+    const { status } = await request(app).get("/api/articles/3");
+    expect(status).toBe(200);
+  });
 
-// describe("GET /api/articles/:article_id", () => {
-//   test("Should return a 200 status", async () => {
-//     const { status } = await request(app).get("/api/articles/3");
-//     expect(status).toBe(200);
-//   });
-//   test("Should return an array of the object article requested by id", async () => {
-//     const {
-//       body: { articles },
-//     } = await request(app).get("/api/articles/3");
-//     const expected =   {
-//       article_id: 3,
-//       title: "Eight pug gifs that remind me of mitch",
-//       topic: "mitch",
-//       author: "icellusedkars",
-//       body: "some gifs",
-//       created_at: 1604394720000,
-//       article_img_url:
-//         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-//     },
+  test("Should return an array of the object article requested by id", async () => {
+    const {
+      body: { article },
+    } = await request(app).get("/api/articles/3");
+    const expected = [
+      {
+        article_id: 3,
+        title: "Eight pug gifs that remind me of mitch",
+        topic: "mitch",
+        author: "icellusedkars",
+        body: "some gifs",
+        created_at: "2020-11-03T09:12:00.000Z",
+        votes: 0,
+        article_img_url:
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      },
+    ];
 
-//     expect(typeof articles).toBe("object");
-//     expect(articles[0]).toEqual(expected);
-//     expect(articles).toHaveLength(1);
-//   });
-//   test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
-//     const {
-//       body: { articles },
-//     } = await request(app).get("/api/articles/9999");
-//     const expected =   {
-//       article_id: 3,
-//       title: "Eight pug gifs that remind me of mitch",
-//       topic: "mitch",
-//       author: "icellusedkars",
-//       body: "some gifs",
-//       created_at: 1604394720000,
-//       article_img_url:
-//         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-//     },
+    expect(typeof article).toBe("object");
+    expect(article).toEqual(expected);
+    expect(article).toHaveLength(1);
+  });
 
-//     expect(typeof articles).toBe("object");
-//     expect(articles[0]).toEqual(expected);
-//     expect(articles).toHaveLength(1);
-//   });
-//   test("Returns a status and error message when given an invalid article id", async () => {
-//     const {
-//       body: { articles },
-//     } = await request(app).get("/api/articles/JELLY");
-//     const expected =   {
-//       article_id: 3,
-//       title: "Eight pug gifs that remind me of mitch",
-//       topic: "mitch",
-//       author: "icellusedkars",
-//       body: "some gifs",
-//       created_at: 1604394720000,
-//       article_img_url:
-//         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-//     },
+  test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
+    const response = await request(app).get("/api/articles/9999").expect(404);
+    const expected = "article does not exist";
 
-//     expect(typeof articles).toBe("object");
-//     expect(articles[0]).toEqual(expected);
-//     expect(articles).toHaveLength(1);
-//   });
-// });
+    expect(response.body.msg).toBe(expected);
+  });
+
+  test("Returns a status and error message when given an invalid article id", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/articles/JELLY").expect(400);
+    const expected = "Bad request";
+
+    expect(msg).toBe(expected);
+  });
+});
