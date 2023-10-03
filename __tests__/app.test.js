@@ -129,7 +129,18 @@ describe("GET /api/articles", () => {
     const correctStructure = articles.every((article) => {
       return Object.keys(expected).every((key) => {
         return article.hasOwnProperty(key);
-      })
+      });
+    });
+
+    articles.forEach((article) => {
+      expect(typeof article.author).toBe("string");
+      expect(typeof article.title).toBe("string");
+      expect(typeof article.article_id).toBe("number");
+      expect(typeof article.topic).toBe("string");
+      expect(typeof article.created_at).toBe("string");
+      expect(typeof article.votes).toBe("number");
+      expect(typeof article.article_img_url).toBe("string");
+      expect(typeof article.comment_count).toBe("string");
     });
 
     expect(correctStructure).toBe(true);
