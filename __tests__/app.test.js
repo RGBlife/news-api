@@ -133,8 +133,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(typeof comment.article_id).toBe("number");
     });
 
-    expect(Array.isArray(articleComments)).toBe(true);
-    expect(typeof articleComments[0]).toBe("object");
     expect(articleComments[0]).toEqual(expected);
     expect(articleComments).toHaveLength(11);
   });
@@ -156,13 +154,13 @@ describe("GET /api/articles/:article_id/comments", () => {
 
     expect(msg).toBe(expected);
   });
-  test("Returns a 200 status and error message when given an a valid article id but it has no comments", async () => {
+  test("Returns a 200 status and empty array when given an a valid article id but it has no comments", async () => {
     const {
-      body: { msg },
+      body: { articleComments },
     } = await request(app).get("/api/articles/7/comments").expect(200);
-    const expected = "article does not have any comments";
+    const expected = [];
 
-    expect(msg).toBe(expected);
+    expect(articleComments).toEqual(expected);
   });
 });
 
@@ -206,8 +204,6 @@ describe("GET /api/articles", () => {
     });
 
     expect(correctStructure).toBe(true);
-    expect(Array.isArray(articles)).toBe(true);
-    expect(Array.isArray(articles[0])).toBe(false);
     expect(articles[0]).toEqual(expected);
     expect(articles).toHaveLength(13);
     expect(articles).toBeSorted({ key: "created_at", descending: true });
