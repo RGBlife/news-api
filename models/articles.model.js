@@ -9,7 +9,7 @@ exports.fetchArticleById = async (id) => {
       return Promise.reject({ status: 404, msg: "article does not exist" });
     }
     return rows;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    throw error;
   }
 };
