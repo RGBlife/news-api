@@ -103,3 +103,55 @@ describe("GET /api/articles/:article_id", () => {
     expect(msg).toBe(expected);
   });
 });
+
+// describe.only("GET /api/articles/:article_id/comments", () => {
+//   test("Should return a 200 status", async () => {
+//     const { status } = await request(app).get("/api/articles/1/comments");
+//     expect(status).toBe(200);
+//   });
+
+//   test("Should return an array of comments requested by article id", async () => {
+//     const {
+//       body: { article },
+//     } = await request(app).get("/api/articles/1/comments");
+//     const expected = [
+//       {
+//         comment_id: 1,
+//         votes: 100,
+//         created_at: "2020-11-03T09:12:00.000Z",
+//         author: "hey",
+//         body: "hello",
+//         article_id: 1,
+//       },
+//     ];
+
+//     expect(Array.isArray(article)).toBe(true);
+//     expect(typeof article[0]).toBe("object");
+//     expect(article[0]).toEqual(expected);
+//     expect(article).toHaveLength(1);
+//   });
+
+//   test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
+//     const response = await request(app).get("/api/articles/9999/comments").expect(404);
+//     const expected = "article does not exist";
+
+//     expect(response.body.msg).toBe(expected);
+//   });
+
+//   test("Returns a status and error message when given an invalid article id", async () => {
+//     const {
+//       body: { msg },
+//     } = await request(app).get("/api/articles/JELLY/comments").expect(400);
+//     const expected = "Bad request";
+
+//     expect(msg).toBe(expected);
+//   });
+//   test("Returns a 200 status and empty comment when given an a valid article id but it has no comments", async () => {
+//     const {
+//       body: { msg },
+//     } = await request(app).get("/api/articles/JELLY/comments").expect(400);
+//     const expected = "Bad request";
+
+//     expect(msg).toBe(expected);
+//   });
+// });
