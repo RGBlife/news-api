@@ -10,7 +10,7 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleById);
 
-app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+// app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.get("/api", (req, res, next) => {
   res.status(200).send({ apiInfo });
