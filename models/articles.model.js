@@ -26,17 +26,36 @@ exports.fetchArticles = async () => {
     a.votes,
     a.article_img_url,
     count(c.comment_id) AS comment_count
-FROM
+    FROM
     articles AS a
     LEFT JOIN comments AS c ON c.article_id = a.article_id
-GROUP BY
+    GROUP BY
     a.article_id
-ORDER BY
+    ORDER BY
     a.created_at DESC;`;
     const { rows } = await db.query(baseQuery);
 
     return rows;
   } catch (err) {
     throw err;
+  }
+};
+
+exports.updateArticle = async (article_id, inc_votes) => {
+  try {
+    let updateQuery = `UPDATE
+    articles
+SET
+    votes = votes + $1
+WHERE
+    article_id = $2
+    RETURNING *;;`;
+    const { rows } = await db.query(updateQuery, [inc_votes, article_id]);
+    if (rows[0].length === 0) {
+      throw { status: 404, msg: "article does not exist" };
+    }
+    return rows[0];
+  } catch (error) {
+    throw error;
   }
 };
