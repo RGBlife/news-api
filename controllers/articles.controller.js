@@ -10,7 +10,8 @@ exports.getArticleById = async ({ params: { article_id } }, res, next) => {
 
 exports.getArticles = async (req, res, next) => {
   try {
-    const articles = await fetchArticles();
+    const { topic } = req.query;
+    const articles = await fetchArticles(topic);
     res.status(200).send({ articles });
   } catch (err) {
     next(err);
