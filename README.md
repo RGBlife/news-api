@@ -6,12 +6,25 @@ Welcome to the Article Hub API! It’s a simple and easy-to-use service for acce
 ## What’s Inside?
 The API provides access to a variety of news articles, allows for comments to be posted, and even lets you filter news by specific topics. It’s built using Node.js and Express and uses PostgreSQL for storing data.
 
+## Table of contents
+
+- [Article Hub API 🗞️](#article-hub-api-️)
+  - [Overview](#overview)
+  - [What’s Inside?](#whats-inside)
+  - [Table of contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [What You Need](#what-you-need)
+    - [How to Get It Running](#how-to-get-it-running)
+    - [.env.development file](#envdevelopment-file)
+    - [.env.test file](#envtest-file)
+    - [.env.production file (if you are hosting the api)](#envproduction-file-if-you-are-hosting-the-api)
+  - [Additional Information](#additional-information)
 
 ## Getting Started
 
 ### What You Need
-- Node.js (v18.18.0 or newer)
-- PostgreSQL (v11.18 or newer)
+- <a href="https://nodejs.org">Node.js</a> (v18.18.0 or newer)
+- <a href="https://www.postgresql.org/">PostgreSQL</a> (v11.18 or newer)
 
 ### How to Get It Running
 1. **Clone the Project:**
@@ -56,7 +69,7 @@ npm install jest -D
 npm install pg-format -D
 npm test
 ```
-**Additional**
+## Additional Information
 
 Check out what API endpoints are available and how to use them by going to [API Info](https://article-hub-api.onrender.com)
 
