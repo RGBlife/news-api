@@ -342,7 +342,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 
 
 
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
 
   test("Should return with an array of users", async () => {
     const response = await request(app)
