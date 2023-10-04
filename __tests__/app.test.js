@@ -248,8 +248,10 @@ describe("POST /api/articles/:article_id/comments", () => {
     };
 
     expect(insertedComment).toMatchObject(expected);
-    expect(typeof insertedComment.created_at).toBe('string');
-    expect(new Date(insertedComment.created_at).toString()).not.toEqual('Invalid Date');
+    expect(typeof insertedComment.created_at).toBe("string");
+    expect(new Date(insertedComment.created_at).toString()).not.toEqual(
+      "Invalid Date"
+    );
   });
 
   test("404: Check that article id exists", async () => {
@@ -270,28 +272,111 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe(expected);
   });
 
-  test('400: Should return 400 if the body is missing from body request', async () => {
-    const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send();
-    
+  test("400: Should return 400 if the body is missing from body request", async () => {
+    const response = await request(app).post("/api/articles/9/comments").send();
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('Request body is missing');
+    expect(response.body.msg).toBe("Request body is missing");
   });
-  test('400: Should return 400 if the author is missing from body request', async () => {
+  test("400: Should return 400 if the author is missing from body request", async () => {
     const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send([{ body: 'Amazing!' }]); 
-    
+      .post("/api/articles/9/comments")
+      .send([{ body: "Amazing!" }]);
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('Author is required');
+    expect(response.body.msg).toBe("Author is required");
   });
-  test('400: Should return 400 if the body is missing from body request', async () => {
+  test("400: Should return 400 if the body is missing from body request", async () => {
     const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send([{ author: 'butter_bridge' }]); 
-    
+      .post("/api/articles/9/comments")
+      .send([{ author: "butter_bridge" }]);
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('body text is required');
+    expect(response.body.msg).toBe("body text is required");
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe("GET /api/articles (sorting queries)", () => {
+  test("Should sort articles by specified column in ascending order", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ sort_by: "author", order: "ASC" })
+      .expect(200);
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toBeSortedBy("author", { ascending: true });
+  });
+  test("Should sort articles by specified column in descending order by default", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ sort_by: "author" })
+      .expect(200);
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toBeSortedBy("author", { descending: true });
+  });
+  test("Should default to sorting by created_at in descending order if no queries are provided", async () => {
+    const response = await request(app).get("/api/articles").expect(200);
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toBeSortedBy("created_at", { descending: true });
+  });
+  test("400: Return an 400 error for invalid sort_by column", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ sort_by: "invalid_column" })
+      .expect(400);
+    const {
+      body: { msg },
+    } = response;
+    expect(msg).toBe("Invalid sort_by column");
+  });
+  test("400: Return an 400 error for invalid order query", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ order: "invalid_order" })
+      .expect(400);
+    const {
+      body: { msg },
+    } = response;
+    expect(msg).toBe("Order must be either ASC or DESC");
   });
 });

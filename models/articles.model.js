@@ -15,7 +15,7 @@ exports.fetchArticleById = async (id) => {
     throw error;
   }
 };
-exports.fetchArticles = async () => {
+exports.fetchArticles = async (sort_by, order) => {
   try {
     let baseQuery = `SELECT
     a.author,
@@ -30,9 +30,42 @@ FROM
     articles AS a
     LEFT JOIN comments AS c ON c.article_id = a.article_id
 GROUP BY
-    a.article_id
-ORDER BY
-    a.created_at DESC;`;
+    a.article_id`;
+
+    const validColumns = [
+      "author",
+      "title",
+      "article_id",
+      "topic",
+      "created_at",
+      "votes",
+      "article_img_url",
+      "comment_count",
+    ];
+    const sortOrder = ["ASC", "DESC"];
+    if (sort_by) {
+      if (validColumns.includes(sort_by)) {
+        baseQuery += ` ORDER BY a.${sort_by}`;
+      } else {
+        return Promise.reject({ status: 400, msg: "Invalid sort_by column" });
+      }
+    } else {
+      baseQuery += ` ORDER BY a.created_at`;
+    }
+
+    if (order) {
+      if (sortOrder.includes(order.toUpperCase())) {
+        baseQuery += ` ${order.toUpperCase()};`;
+      } else {
+        return Promise.reject({
+          status: 400,
+          msg: "Order must be either ASC or DESC",
+        });
+      }
+    } else {
+      baseQuery += ` DESC;`;
+    }
+
     const { rows } = await db.query(baseQuery);
 
     return rows;

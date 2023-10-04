@@ -63,8 +63,8 @@ exports.apiInfo = {
   },
   "GET /api/articles": {
     description:
-      "serves an array of articles sorted by created_at descending and addition of comment count with body property removed",
-    queries: [],
+      "serves an array of articles sorted by created_at descending by default and includes sorting options",
+    queries: ["sort_by", "order"],
     exampleResponse: {
       articles: [
         {
