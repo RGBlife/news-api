@@ -16,12 +16,37 @@ exports.apiInfo = {
     },
     requiredBodyFormat: {},
   },
+  "GET /api/articles/:article_id/comments": {
+    description:
+      "Retrieves all comments associated to the article_id specified, ascending by created_at",
+    queries: [],
+    exampleResponse: {
+      topics: [
+        {
+          comment_id: 9,
+          votes: 0,
+          created_at: "2020-01-01T03:08:00.000Z",
+          author: "icellusedkars",
+          body: "Superficially charming",
+          article_id: 1,
+        },
+      ],
+    },
+    requiredBodyFormat: {},
+  },
+
   "GET /api/articles/:article_id": {
     description: "serves an array of an article",
     queries: [],
     exampleResponse: {
       article: [
         {
+          comment_id: 1,
+          votes: 100,
+          created_at: "2020-11-03T09:12:00.000Z",
+          author: "hey",
+          body: "hello",
+          article_id: 1,
           article_id: 3,
           title: "Eight pug gifs that remind me of mitch",
           topic: "mitch",
@@ -74,21 +99,18 @@ exports.apiInfo = {
       "Inserts a new comment for the specified article and returns the inserted comment.",
     queries: [],
     exampleResponse: {
-      comment: [
-        {
-          comment_id: 17,
-          votes: 20,
-          created_at: "2020-03-14 17:02:00",
-          author: "icellusedkars",
-          body: "The owls are not what they seem.",
-          article_id: 9,
-        },
-      ],
+      insertedComment: {
+        comment_id: 17,
+        votes: 20,
+        created_at: "2020-03-14 17:02:00",
+        author: "icellusedkars",
+        body: "The owls are not what they seem.",
+        article_id: 9,
+      },
     },
     requiredBodyFormat: {
       author: "string",
       body: "string",
     },
   },
-
 };

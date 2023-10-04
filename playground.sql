@@ -1,4 +1,7 @@
 \c nc_news_test
+\l
+\dt
+
 SELECT
     *
 FROM
@@ -19,42 +22,20 @@ SELECT
 FROM
     comments;
 
-SELECT
-    a.author,
-    a.title,
-    a.article_id,
-    a.topic,
-    a.created_at,
-    a.votes,
-    a.article_img_url,
-    count(c.comment_id) AS comment_count
-FROM
-    articles AS a
-    JOIN comments AS c ON c.article_id = a.article_id
-GROUP BY
-    a.author,
-    a.title,
-    a.article_id,
-    a.topic,
-    a.created_at,
-    a.votes,
-    a.article_img_url
-ORDER BY
-    a.created_at DESC;
+INSERT INTO
+    comments (body, article_id, author, votes, created_at)
+VALUES
+    (
+        'Amazing',
+        '9',
+        'icellusedkars',
+        0,
+        '2020-04-06 13:17:00'
+    );
 
 SELECT
-    a.author,
-    a.title,
-    a.article_id,
-    a.topic,
-    a.created_at,
-    a.votes,
-    a.article_img_url,
-    count(c.comment_id) AS comment_count
+    *
 FROM
-    articles AS a
-    LEFT JOIN comments AS c ON c.article_id = a.article_id
-GROUP BY
-    a.article_id
-ORDER BY
-    a.created_at DESC;
+    comments;
+
+-- body| article_id |    author     | votes |     created_at
