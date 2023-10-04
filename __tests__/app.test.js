@@ -295,3 +295,74 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe('body text is required');
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe.only("GET /api/users", () => {
+
+  test("Should return with an array of users", async () => {
+    const response = await request(app)
+      .get("/api/users").expect(200)
+    const {users} = response.body
+    expect(Array.isArray(users)).toBe(true);
+  });
+
+  test("Check that user match the object structure and returns right amount of users", async () => {
+    const response = await request(app)
+      .get("/api/users").expect(200)
+    const {users} = response.body
+
+    const expected = {
+      avatar_url: "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+      name: "jonny",
+      username: "butter_bridge",
+    };
+
+    expect(users[0]).toMatchObject(expected);
+    expect(users).toHaveLength(4);
+  });
+});

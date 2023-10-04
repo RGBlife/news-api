@@ -38,4 +38,6 @@ SELECT
 FROM
     comments;
 
+SELECT * FROM users;
+
 -- body| article_id |    author     | votes |     created_at

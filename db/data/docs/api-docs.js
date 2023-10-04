@@ -113,4 +113,71 @@ exports.apiInfo = {
       body: "string",
     },
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  "GET /api/users": {
+    description: "Returns a list of all users.",
+    queries: [],
+    exampleResponse: {
+      users: [
+        {
+          username: "exampleUser1",
+          name: "Example User1",
+          avatar_url: "http://example.com/avatar1.jpg",
+        },
+        {
+          username: "exampleUser2",
+          name: "Example User2",
+          avatar_url: "http://example.com/avatar2.jpg",
+        },
+      ],
+    },
+    requiredBodyFormat: {
+    },
+  },
 };
