@@ -29,16 +29,16 @@ exports.insertComment = async (body, article_id) => {
   let insertQuery = `
     INSERT INTO
     comments (body, article_id, author, votes, created_at)
-  VALUES
+    VALUES
     (
         $1,
         $2,
         $3,
         0,
         $4
-    )
-    RETURNING *;
-    `;
+        )
+        RETURNING *;
+        `;
   const { rows } = await db.query(insertQuery, [
     body[0].body,
     article_id,
@@ -46,4 +46,33 @@ exports.insertComment = async (body, article_id) => {
     timestamp,
   ]);
   return rows[0];
+};
+
+exports.fetchCommentByCommentId = async (comment_id) => {
+  try {
+    let commentQuery = `SELECT *
+      FROM
+          comments
+      WHERE
+          comments.comment_id = $1;`;
+    const { rows } = await db.query(commentQuery, [comment_id]);
+
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "comment does not exist" });
+    }
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+exports.removeCommentById = async (comment_id) => {
+  try {
+    let commentQuery = `DELETE FROM comments
+      WHERE
+          comments.comment_id = $1;`;
+    await db.query(commentQuery, [comment_id]);
+  } catch (error) {
+    throw error;
+  }
 };

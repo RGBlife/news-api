@@ -113,4 +113,14 @@ exports.apiInfo = {
       body: "string",
     },
   },
+
+  "DELETE /api/comments/:comment_id": {
+    description:
+      "Deletes the specified comment by comment_id and responds with a status of 204 and no content.",
+    queries: [],
+    exampleResponse: {
+      status: 204,
+    },
+    requiredBodyFormat: {},
+  },
 };

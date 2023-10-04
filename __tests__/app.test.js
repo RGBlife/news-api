@@ -295,3 +295,30 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe('body text is required');
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+
+  test('It should respond with a 204 status for successful deletion', async () => {
+    const response = await request(app)
+      .delete('/api/comments/1')
+      .expect(204);
+      
+    expect(response.body).toEqual({});
+  });
+
+  test('404: It should respond with a 404 status if comment does not exist', async () => {
+    const response = await request(app)
+      .delete('/api/comments/99999')
+      .expect(404);
+      
+    expect(response.body.msg).toEqual('comment does not exist');
+  });
+
+  test('400: It should respond with a 400 status for invalid comment_id', async () => {
+    const response = await request(app)
+      .delete('/api/comments/not-a-number')
+      .expect(400);
+      
+    expect(response.body.msg).toEqual('Bad request');
+  });
+});
