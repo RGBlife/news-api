@@ -217,3 +217,81 @@ describe("GET /api/articles", () => {
     expect(msg).toBe("Path not found.");
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  const posted = [
+    {
+      author: "butter_bridge",
+      body: "Amazing!",
+    },
+  ];
+
+  test("Should return a 201 status", async () => {
+    const response = await request(app)
+      .post("/api/articles/9/comments")
+      .send(posted);
+    expect(response.status).toBe(201);
+  });
+
+  test("Insert comment should match the object structure", async () => {
+    const response = await request(app)
+      .post("/api/articles/9/comments")
+      .send(posted);
+    const { insertedComment } = response.body;
+
+    const expected = {
+      comment_id: 19,
+      votes: 0,
+      author: "butter_bridge",
+      body: "Amazing!",
+      article_id: 9,
+    };
+
+    expect(insertedComment).toMatchObject(expected);
+    expect(typeof insertedComment.created_at).toBe('string');
+    expect(new Date(insertedComment.created_at).toString()).not.toEqual('Invalid Date');
+  });
+
+  test("404: Check that article id exists", async () => {
+    const response = await request(app)
+      .post("/api/articles/9999/comments")
+      .send(posted)
+      .expect(404);
+    const expected = "article does not exist";
+    expect(response.body.msg).toBe(expected);
+  });
+
+  test("400: Check that article id is valid", async () => {
+    const response = await request(app)
+      .post("/api/articles/HELLO/comments")
+      .send(posted)
+      .expect(400);
+    const expected = "Bad request";
+    expect(response.body.msg).toBe(expected);
+  });
+
+  test('400: Should return 400 if the body is missing from body request', async () => {
+    const response = await request(app)
+      .post('/api/articles/9/comments')
+      .send();
+    
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe('Request body is missing');
+  });
+  test('400: Should return 400 if the author is missing from body request', async () => {
+    const response = await request(app)
+      .post('/api/articles/9/comments')
+      .send([{ body: 'Amazing!' }]); 
+    
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe('Author is required');
+  });
+  test('400: Should return 400 if the body is missing from body request', async () => {
+    const response = await request(app)
+      .post('/api/articles/9/comments')
+      .send([{ author: 'butter_bridge' }]); 
+    
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe('body text is required');
+  });
+});

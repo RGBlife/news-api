@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 \c nc_news_test 
 \l 
 \dt
+=======
+\c nc_news_test
+\l
+\dt
+
+>>>>>>> main
 SELECT
     *
 FROM
@@ -21,6 +28,7 @@ SELECT
 FROM
     comments;
 
+<<<<<<< HEAD
 SELECT
     c.comment_id,
     c.votes,
@@ -42,3 +50,22 @@ ORDER BY
 SELECT *
 FROM articles
 WHERE 9999 = articles.article_id;
+=======
+INSERT INTO
+    comments (body, article_id, author, votes, created_at)
+VALUES
+    (
+        'Amazing',
+        '9',
+        'icellusedkars',
+        0,
+        '2020-04-06 13:17:00'
+    );
+
+SELECT
+    *
+FROM
+    comments;
+
+-- body| article_id |    author     | votes |     created_at
+>>>>>>> main
