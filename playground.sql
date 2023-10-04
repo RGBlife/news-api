@@ -1,7 +1,6 @@
 \c nc_news_test
 \l
 \dt
-
 SELECT
     *
 FROM
@@ -39,3 +38,17 @@ FROM
     comments;
 
 -- body| article_id |    author     | votes |     created_at
+SELECT
+    a.*,
+    (
+        SELECT
+            COUNT(*)
+        FROM
+            comments c
+        WHERE
+            c.article_id = a.article_id
+    ) as comment_count
+FROM
+    articles a
+WHERE
+    a.article_id = 3;

@@ -56,6 +56,7 @@ exports.apiInfo = {
           votes: 0,
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          comment_count: 5
         },
       ],
     },
@@ -63,8 +64,8 @@ exports.apiInfo = {
   },
   "GET /api/articles": {
     description:
-      "serves an array of articles sorted by created_at descending and addition of comment count with body property removed",
-    queries: [],
+      "Retrieves all articles or filters articles by the topic specified in the query parameter. If the topic query is omitted, responds with all articles.",
+    queries: ["topic"],
     exampleResponse: {
       articles: [
         {
@@ -93,7 +94,7 @@ exports.apiInfo = {
     },
     requiredBodyFormat: {},
   },
-
+  
   "POST /api/articles/:article_id/comments": {
     description:
       "Inserts a new comment for the specified article and returns the inserted comment.",
@@ -113,4 +114,37 @@ exports.apiInfo = {
       body: "string",
     },
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 };

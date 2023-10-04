@@ -84,7 +84,7 @@ describe("GET /api/articles/:article_id", () => {
     ];
 
     expect(typeof article).toBe("object");
-    expect(article).toEqual(expected);
+    expect(article).toMatchObject(expected);
     expect(article).toHaveLength(1);
   });
 
@@ -248,8 +248,10 @@ describe("POST /api/articles/:article_id/comments", () => {
     };
 
     expect(insertedComment).toMatchObject(expected);
-    expect(typeof insertedComment.created_at).toBe('string');
-    expect(new Date(insertedComment.created_at).toString()).not.toEqual('Invalid Date');
+    expect(typeof insertedComment.created_at).toBe("string");
+    expect(new Date(insertedComment.created_at).toString()).not.toEqual(
+      "Invalid Date"
+    );
   });
 
   test("404: Check that article id exists", async () => {
@@ -270,28 +272,256 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe(expected);
   });
 
-  test('400: Should return 400 if the body is missing from body request', async () => {
-    const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send();
-    
+  test("400: Should return 400 if the body is missing from body request", async () => {
+    const response = await request(app).post("/api/articles/9/comments").send();
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('Request body is missing');
+    expect(response.body.msg).toBe("Request body is missing");
   });
-  test('400: Should return 400 if the author is missing from body request', async () => {
+  test("400: Should return 400 if the author is missing from body request", async () => {
     const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send([{ body: 'Amazing!' }]); 
-    
+      .post("/api/articles/9/comments")
+      .send([{ body: "Amazing!" }]);
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('Author is required');
+    expect(response.body.msg).toBe("Author is required");
   });
-  test('400: Should return 400 if the body is missing from body request', async () => {
+  test("400: Should return 400 if the body is missing from body request", async () => {
     const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send([{ author: 'butter_bridge' }]); 
-    
+      .post("/api/articles/9/comments")
+      .send([{ author: "butter_bridge" }]);
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('body text is required');
+    expect(response.body.msg).toBe("body text is required");
   });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("Should return an array of the object article requested by id with the addition of comment_count", async () => {
+    const {
+      body: { article },
+    } = await request(app).get("/api/articles/3");
+    const expected = [
+      {
+        article_id: 3,
+        title: "Eight pug gifs that remind me of mitch",
+        topic: "mitch",
+        author: "icellusedkars",
+        body: "some gifs",
+        created_at: "2020-11-03T09:12:00.000Z",
+        votes: 0,
+        article_img_url:
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        comment_count: "2",
+      },
+    ];
+
+    expect(article).toMatchObject(expected);
+    expect(article).toHaveLength(1);
+  });
+
 });

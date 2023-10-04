@@ -2,9 +2,20 @@ const db = require("../db/connection");
 
 exports.fetchArticleById = async (id) => {
   try {
-    let baseQuery = `SELECT * 
-    FROM articles 
-    WHERE article_id = $1;`;
+    let baseQuery = `SELECT
+    a.*,
+    (
+        SELECT
+            COUNT(*)
+        FROM
+            comments c
+        WHERE
+            c.article_id = a.article_id
+    ) as comment_count
+FROM
+    articles a
+WHERE
+    a.article_id = $1;`;
     const { rows } = await db.query(baseQuery, [id]);
 
     if (rows.length === 0) {
@@ -34,7 +45,6 @@ GROUP BY
 ORDER BY
     a.created_at DESC;`;
     const { rows } = await db.query(baseQuery);
-
     return rows;
   } catch (err) {
     throw err;
