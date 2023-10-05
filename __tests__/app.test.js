@@ -401,6 +401,19 @@ describe("GET /api/articles (topic query)", () => {
     expect(articles).toHaveLength(12);
   });
 
+  test("Returns a 200 status and empty array when given an valid topic but it has no article", async () => {
+    const response = await request(app)
+    .get("/api/articles?topic=paper")
+    .expect(200);
+  const {
+    body: { articles },
+  } = response;
+    
+    const expected = [];
+
+    expect(articles).toEqual(expected);
+  });
+
   test("404: Should return 404 error for invalid topic", async () => {
     const response = await request(app)
       .get("/api/articles?topic=HELLO")
