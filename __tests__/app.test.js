@@ -298,12 +298,17 @@ describe("POST /api/articles/:article_id/comments", () => {
 
 describe("DELETE /api/comments/:comment_id", () => {
 
-  test('It should respond with a 204 status for successful deletion', async () => {
+  test('It should respond with a 204 status for successful deletion and check that the comment no longer exists', async () => {
     const response = await request(app)
       .delete('/api/comments/1')
       .expect(204);
-      
+
+    const recordExists = await connection.query(`SELECT * FROM comments WHERE comment_id = 1`);
+    const totalRecords = await connection.query(`SELECT * FROM comments`);
+
     expect(response.body).toEqual({});
+    expect(recordExists.rows).toEqual([]);
+    expect(totalRecords.rows).toHaveLength(17);
   });
 
   test('404: It should respond with a 404 status if comment does not exist', async () => {
