@@ -65,27 +65,24 @@ describe("GET /api/articles/:article_id", () => {
     expect(status).toBe(200);
   });
 
-  test("Should return an array of the object article requested by id", async () => {
+  test("Should return an object article requested by id", async () => {
     const {
       body: { article },
     } = await request(app).get("/api/articles/3");
-    const expected = [
-      {
-        article_id: 3,
-        title: "Eight pug gifs that remind me of mitch",
-        topic: "mitch",
-        author: "icellusedkars",
-        body: "some gifs",
-        created_at: "2020-11-03T09:12:00.000Z",
-        votes: 0,
-        article_img_url:
-          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-      },
-    ];
+    const expected = {
+      article_id: 3,
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      author: "icellusedkars",
+      body: "some gifs",
+      created_at: "2020-11-03T09:12:00.000Z",
+      votes: 0,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
 
     expect(typeof article).toBe("object");
-    expect(article).toEqual(expected);
-    expect(article).toHaveLength(1);
+    expect(article).toMatchObject(expected);
   });
 
   test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
@@ -286,7 +283,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("Author is required");
   });
-  test("400: Should return 400 if the body is missing from body request", async () => {
+  test("400: Should return 400 if the body text is missing from body request", async () => {
     const response = await request(app)
       .post("/api/articles/9/comments")
       .send([{ author: "butter_bridge" }]);
@@ -296,47 +293,11 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 describe("GET /api/articles (sorting queries)", () => {
   test("Should sort articles by specified column in ascending order", async () => {
     const response = await request(app)
       .get("/api/articles")
-      .query({ sort_by: "author", order: "ASC" })
-      .expect(200);
+      .query({ sort_by: "author", order: "ASC" });
     const {
       body: { articles },
     } = response;
@@ -345,8 +306,7 @@ describe("GET /api/articles (sorting queries)", () => {
   test("Should sort articles by specified column in descending order by default", async () => {
     const response = await request(app)
       .get("/api/articles")
-      .query({ sort_by: "author" })
-      .expect(200);
+      .query({ sort_by: "author" });
     const {
       body: { articles },
     } = response;
@@ -378,5 +338,242 @@ describe("GET /api/articles (sorting queries)", () => {
       body: { msg },
     } = response;
     expect(msg).toBe("Order must be either ASC or DESC");
+  });
+});
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("Should return object article requested by id with the addition of comment_count", async () => {
+    const {
+      body: { article },
+    } = await request(app).get("/api/articles/3");
+    const expected = {
+      article_id: 3,
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      author: "icellusedkars",
+      body: "some gifs",
+      created_at: "2020-11-03T09:12:00.000Z",
+      votes: 0,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      comment_count: "2",
+    };
+
+    expect(article).toMatchObject(expected);
+  });
+});
+describe("GET /api/articles (topic query)", () => {
+  test("Should return articles filtered by topic when topic query is provided", async () => {
+    const response = await request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200);
+    const {
+      body: { articles },
+    } = response;
+    const expected = {
+      article_id: 3,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      author: "icellusedkars",
+      comment_count: "2",
+      created_at: "2020-11-03T09:12:00.000Z",
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      votes: 0,
+    };
+
+    expect(articles[0]).toMatchObject(expected);
+    expect(articles).toHaveLength(12);
+  });
+
+  test("Returns a 200 status and empty array when given an valid topic but it has no article", async () => {
+    const response = await request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200);
+    const {
+      body: { articles },
+    } = response;
+
+    const expected = [];
+
+    expect(articles).toEqual(expected);
+  });
+
+  test("404: Should return 404 error for invalid topic", async () => {
+    const response = await request(app)
+      .get("/api/articles?topic=HELLO")
+      .expect(404);
+    const {
+      body: { msg },
+    } = response;
+    expect(msg).toBe("Topic does not exist");
+  });
+
+  test("Should return all articles if passed an empty topic query ", async () => {
+    const response = await request(app).get("/api/articles?topic=").expect(200);
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toHaveLength(13);
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  const patch = {
+    inc_votes: 100,
+  };
+
+  test("Patched article should match the object structure and increase votes", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send(patch)
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "Well? Think about it.",
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: 100,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
+    expect(patchedArticle).toMatchObject(expected);
+  });
+  test("Patched article should decrease if passed a negative number", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: -100,
+      })
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "Well? Think about it.",
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: -100,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
+    expect(patchedArticle).toMatchObject(expected);
+  });
+  test("Should ignore properties other than inc_votes if provided", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: -999,
+        title: "One can think.",
+        invalid_property: 200,
+        invalid_property1: "title",
+      })
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "Well? Think about it.",
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: -999,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+
+    expect(patchedArticle).toEqual(expected);
+  });
+  test("400: Return a 400 error for invalid vote input", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: "hey",
+      })
+      .expect(400);
+    const { msg } = response.body;
+
+    const expected = "Bad request";
+
+    expect(msg).toBe(expected);
+  });
+  test("404: Return a 404 error if article does not exist", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9999999")
+      .send(patch)
+      .expect(404);
+    const { msg } = response.body;
+
+    const expected = "article does not exist";
+
+    expect(msg).toBe(expected);
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("It should respond with a 204 status for successful deletion and check that the comment no longer exists", async () => {
+    const response = await request(app).delete("/api/comments/1").expect(204);
+
+    const recordExists = await connection.query(
+      `SELECT * FROM comments WHERE comment_id = 1`
+    );
+    const totalRecords = await connection.query(`SELECT * FROM comments`);
+
+    expect(response.body).toEqual({});
+    expect(recordExists.rows).toEqual([]);
+    expect(totalRecords.rows).toHaveLength(17);
+  });
+
+  test("404: It should respond with a 404 status if comment does not exist", async () => {
+    const response = await request(app)
+      .delete("/api/comments/99999")
+      .expect(404);
+
+    expect(response.body.msg).toEqual("comment does not exist");
+  });
+
+  test("400: It should respond with a 400 status for invalid comment_id", async () => {
+    const response = await request(app)
+      .delete("/api/comments/not-a-number")
+      .expect(400);
+
+    expect(response.body.msg).toEqual("Bad request");
+  });
+});
+
+describe("GET /api/users", () => {
+  test("Should return with an array of users", async () => {
+    const response = await request(app).get("/api/users").expect(200);
+    const { users } = response.body;
+    expect(Array.isArray(users)).toBe(true);
+  });
+
+  test("Check that user match the object structure and returns right amount of users", async () => {
+    const response = await request(app).get("/api/users").expect(200);
+    const { users } = response.body;
+
+    const expected = {
+      avatar_url:
+        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+      name: "jonny",
+      username: "butter_bridge",
+    };
+
+    users.forEach((user) => {
+      expect(typeof user.avatar_url).toBe("string");
+      expect(typeof user.name).toBe("string");
+      expect(typeof user.username).toBe("string");
+    });
+
+    expect(users[0]).toMatchObject(expected);
+    expect(users).toHaveLength(4);
   });
 });
