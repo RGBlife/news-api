@@ -343,6 +343,31 @@ describe("PATCH /api/articles/:article_id", () => {
 
     expect(patchedArticle).toMatchObject(expected);
   });
+  test("Should ignore properties other than inc_votes if provided", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: -999,
+        title: "One can think.",
+        invalid_property: 200,
+        invalid_property1: "title",
+      })
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: 'mitch',
+      author: 'butter_bridge',
+      body: 'Well? Think about it.',
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: -999,
+      article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+    };
+
+    expect(patchedArticle).toEqual(expected);
+  });
   test("400: Return a 400 error for invalid vote input", async () => {
     const response = await request(app)
       .patch("/api/articles/9")

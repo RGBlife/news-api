@@ -1,7 +1,6 @@
 const db = require("../db/connection");
 
 exports.fetchArticleById = async (id) => {
-  try {
     let baseQuery = `SELECT * 
     FROM articles 
     WHERE article_id = $1;`;
@@ -11,12 +10,9 @@ exports.fetchArticleById = async (id) => {
       return Promise.reject({ status: 404, msg: "article does not exist" });
     }
     return rows;
-  } catch (error) {
-    throw error;
-  }
+
 };
 exports.fetchArticles = async () => {
-  try {
     let baseQuery = `SELECT
     a.author,
     a.title,
@@ -36,13 +32,10 @@ exports.fetchArticles = async () => {
     const { rows } = await db.query(baseQuery);
 
     return rows;
-  } catch (err) {
-    throw err;
-  }
+
 };
 
 exports.updateArticle = async (article_id, inc_votes) => {
-  try {
     let updateQuery = `UPDATE
     articles
 SET
@@ -55,7 +48,5 @@ WHERE
       throw { status: 404, msg: "article does not exist" };
     }
     return rows[0];
-  } catch (error) {
-    throw error;
-  }
+
 };
