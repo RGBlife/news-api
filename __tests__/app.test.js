@@ -65,27 +65,24 @@ describe("GET /api/articles/:article_id", () => {
     expect(status).toBe(200);
   });
 
-  test("Should return an array of the object article requested by id", async () => {
+  test("Should return an object article requested by id", async () => {
     const {
       body: { article },
     } = await request(app).get("/api/articles/3");
-    const expected = [
-      {
-        article_id: 3,
-        title: "Eight pug gifs that remind me of mitch",
-        topic: "mitch",
-        author: "icellusedkars",
-        body: "some gifs",
-        created_at: "2020-11-03T09:12:00.000Z",
-        votes: 0,
-        article_img_url:
-          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-      },
-    ];
+    const expected = {
+      article_id: 3,
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      author: "icellusedkars",
+      body: "some gifs",
+      created_at: "2020-11-03T09:12:00.000Z",
+      votes: 0,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
 
     expect(typeof article).toBe("object");
     expect(article).toMatchObject(expected);
-    expect(article).toHaveLength(1);
   });
 
   test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
@@ -296,232 +293,24 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 describe("GET /api/articles/:article_id (comment_count)", () => {
-  test("Should return an array of the object article requested by id with the addition of comment_count", async () => {
+  test("Should return object article requested by id with the addition of comment_count", async () => {
     const {
       body: { article },
     } = await request(app).get("/api/articles/3");
-    const expected = [
-      {
-        article_id: 3,
-        title: "Eight pug gifs that remind me of mitch",
-        topic: "mitch",
-        author: "icellusedkars",
-        body: "some gifs",
-        created_at: "2020-11-03T09:12:00.000Z",
-        votes: 0,
-        article_img_url:
-          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-        comment_count: "2",
-      },
-    ];
+    const expected = {
+      article_id: 3,
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      author: "icellusedkars",
+      body: "some gifs",
+      created_at: "2020-11-03T09:12:00.000Z",
+      votes: 0,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      comment_count: "2",
+    };
 
     expect(article).toMatchObject(expected);
-    expect(article).toHaveLength(1);
   });
-
 });
