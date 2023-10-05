@@ -362,6 +362,12 @@ describe("GET /api/users", () => {
       username: "butter_bridge",
     };
 
+    users.forEach((user) => {
+      expect(typeof user.avatar_url).toBe("string")
+      expect(typeof user.name).toBe("string")
+      expect(typeof user.username).toBe("string")
+    })
+
     expect(users[0]).toMatchObject(expected);
     expect(users).toHaveLength(4);
   });
