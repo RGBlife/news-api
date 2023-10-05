@@ -1,17 +1,27 @@
 const db = require("../db/connection");
 
 exports.fetchArticleById = async (id) => {
-  let baseQuery = `SELECT * 
-    FROM articles 
-    WHERE article_id = $1;`;
+  let baseQuery = `SELECT
+  a.*,
+  (
+      SELECT
+          COUNT(*)
+      FROM
+          comments c
+      WHERE
+          c.article_id = a.article_id
+  ) as comment_count
+FROM
+  articles a
+WHERE
+  a.article_id = $1;`;
   const { rows } = await db.query(baseQuery, [id]);
 
   if (rows.length === 0) {
     return Promise.reject({ status: 404, msg: "article does not exist" });
   }
-  return rows;
+  return rows[0];
 };
-
 
 exports.fetchArticles = async (topic) => {
   if (topic) {
@@ -21,7 +31,7 @@ exports.fetchArticles = async (topic) => {
       return Promise.reject({ status: 404, msg: "Topic does not exist" });
   }
 
-    let baseQuery = `SELECT
+  let baseQuery = `SELECT
     a.author,
     a.title,
     a.article_id,
@@ -48,21 +58,19 @@ exports.fetchArticles = async (topic) => {
 
   const { rows } = await db.query(baseQuery, values);
   return rows;
-
 };
 
 exports.updateArticle = async (article_id, inc_votes) => {
-    let updateQuery = `UPDATE
+  let updateQuery = `UPDATE
     articles
 SET
     votes = votes + $1
 WHERE
     article_id = $2
     RETURNING *;`;
-    const { rows } = await db.query(updateQuery, [inc_votes, article_id]);
-    if (rows[0].length === 0) {
-      throw { status: 404, msg: "article does not exist" };
-    }
-    return rows[0];
-
+  const { rows } = await db.query(updateQuery, [inc_votes, article_id]);
+  if (rows[0].length === 0) {
+    throw { status: 404, msg: "article does not exist" };
+  }
+  return rows[0];
 };

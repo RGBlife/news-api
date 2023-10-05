@@ -19,7 +19,6 @@ GROUP By
 ORDER BY
     c.created_at;`;
   const { rows } = await db.query(commentsQuery, [article_id]);
-
   return rows;
 };
 

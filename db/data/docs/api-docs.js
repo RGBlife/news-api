@@ -36,35 +36,34 @@ exports.apiInfo = {
   },
 
   "GET /api/articles/:article_id": {
-    description: "serves an array of an article",
+    description: "Serves an article specified by the article_id",
     queries: [],
     exampleResponse: {
-      article: [
-        {
-          comment_id: 1,
-          votes: 100,
-          created_at: "2020-11-03T09:12:00.000Z",
-          author: "hey",
-          body: "hello",
-          article_id: 1,
-          article_id: 3,
-          title: "Eight pug gifs that remind me of mitch",
-          topic: "mitch",
-          author: "icellusedkars",
-          body: "some gifs",
-          created_at: "2020-11-03T09:12:00.000Z",
-          votes: 0,
-          article_img_url:
-            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-        },
-      ],
+      article: {
+        comment_id: 1,
+        votes: 100,
+        created_at: "2020-11-03T09:12:00.000Z",
+        author: "hey",
+        body: "hello",
+        article_id: 1,
+        article_id: 3,
+        title: "Eight pug gifs that remind me of mitch",
+        topic: "mitch",
+        author: "icellusedkars",
+        body: "some gifs",
+        created_at: "2020-11-03T09:12:00.000Z",
+        votes: 0,
+        article_img_url:
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        comment_count: 5,
+      },
     },
     requiredBodyFormat: {},
   },
   "GET /api/articles": {
     description:
-      "serves an array of articles sorted by created_at descending and addition of comment count with body property removed",
-    queries: [],
+      "Retrieves all articles or filters articles by the topic specified in the query parameter. If the topic query is omitted, responds with all articles.",
+    queries: ["topic"],
     exampleResponse: {
       articles: [
         {
