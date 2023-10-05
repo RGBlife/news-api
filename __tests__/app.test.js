@@ -577,3 +577,26 @@ describe("GET /api/users", () => {
     expect(users).toHaveLength(4);
   });
 });
+
+describe("GET /api/users/:username", () => {
+  test("Should return object username requested by id", async () => {
+    const {
+      body: { user },
+    } = await request(app).get("/api/users/rogersop").expect(200);
+    const expected = {
+      username: "rogersop",
+      name: "paul",
+      avatar_url: "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+    };
+
+    expect(user).toMatchObject(expected);
+  });
+  test("404: Should return 404 error if username doesn't exist", async () => {
+    const {
+      body: { msg },
+    } = await request(app).get("/api/users/invalid_username").expect(404);
+    const expected = "username does not exist."
+
+    expect(msg).toBe(expected);
+  });
+});

@@ -160,4 +160,17 @@ exports.apiInfo = {
       inc_votes: 100,
     },
   },
+  "GET /api/users/:username": {
+    description: "Serves an username specified by the article_id",
+    queries: [],
+    exampleResponse: {
+      user: {
+        username: "rogersop",
+        name: "paul",
+        avatar_url:
+          "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+      },
+    },
+    requiredBodyFormat: {},
+  },
 };
