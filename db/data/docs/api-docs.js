@@ -113,6 +113,17 @@ exports.apiInfo = {
       body: "string",
     },
   },
+
+  "DELETE /api/comments/:comment_id": {
+    description:
+      "Deletes the specified comment by comment_id and responds with a status of 204 and no content.",
+    queries: [],
+    exampleResponse: {
+      status: 204,
+    },
+    requiredBodyFormat: {},
+  },
+
   "PATCH /api/articles/:article_id": {
     description:
       "Updates votes by increasing or decreasing the votes to the specified article and returns the updated article.",
