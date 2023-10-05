@@ -114,6 +114,25 @@ exports.apiInfo = {
     },
   },
 
+  "GET /api/users": {
+    description: "Returns a list of all users.",
+    queries: [],
+    exampleResponse: {
+      users: [
+        {
+          username: "exampleUser1",
+          name: "Example User1",
+          avatar_url: "http://example.com/avatar1.jpg",
+        },
+        {
+          username: "exampleUser2",
+          name: "Example User2",
+          avatar_url: "http://example.com/avatar2.jpg",
+        },
+      ],
+    },
+    requiredBodyFormat: {},
+  },
   "DELETE /api/comments/:comment_id": {
     description:
       "Deletes the specified comment by comment_id and responds with a status of 204 and no content.",

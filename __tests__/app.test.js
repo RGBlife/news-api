@@ -425,3 +425,80 @@ describe("DELETE /api/comments/:comment_id", () => {
     expect(response.body.msg).toEqual('Bad request');
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe("GET /api/users", () => {
+
+  test("Should return with an array of users", async () => {
+    const response = await request(app)
+      .get("/api/users").expect(200)
+    const {users} = response.body
+    expect(Array.isArray(users)).toBe(true);
+  });
+
+  test("Check that user match the object structure and returns right amount of users", async () => {
+    const response = await request(app)
+      .get("/api/users").expect(200)
+    const {users} = response.body
+
+    const expected = {
+      avatar_url: "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+      name: "jonny",
+      username: "butter_bridge",
+    };
+
+    users.forEach((user) => {
+      expect(typeof user.avatar_url).toBe("string")
+      expect(typeof user.name).toBe("string")
+      expect(typeof user.username).toBe("string")
+    })
+
+    expect(users[0]).toMatchObject(expected);
+    expect(users).toHaveLength(4);
+  });
+});

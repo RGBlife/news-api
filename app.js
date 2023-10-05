@@ -11,6 +11,7 @@ const {
   getArticles,
   patchArticle,
 } = require("./controllers/articles.controller");
+const {getUsers} = require("./controllers/users.controller");
 const { apiInfo } = require("./db/data/docs/api-docs");
 const express = require("express");
 const app = express();
@@ -27,6 +28,11 @@ app.patch("/api/articles/:article_id", patchArticle);
 app.post("/api/articles/:article_id/comments", postComment);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.delete("/api/comments/:comment_id", deleteCommentById);
+
+
+
+
+app.get("/api/users", getUsers);
 
 app.get("/api", (req, res, next) => {
   res.status(200).send({ apiInfo });

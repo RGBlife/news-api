@@ -1,6 +1,8 @@
 node_modules
 .env.*
 
+<<<<<<< HEAD
+=======
 
 
 
@@ -25,6 +27,7 @@ node_modules
 
 
 
+>>>>>>> main
 playground.sql
 playground.txt
 
