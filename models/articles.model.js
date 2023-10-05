@@ -12,6 +12,7 @@ exports.fetchArticleById = async (id) => {
   return rows;
 };
 
+
 exports.fetchArticles = async (topic) => {
   if (topic) {
     const topicQuery = `SELECT * FROM topics WHERE topics.slug = $1`;
@@ -20,7 +21,7 @@ exports.fetchArticles = async (topic) => {
       return Promise.reject({ status: 404, msg: "Topic does not exist" });
   }
 
-  let baseQuery = `SELECT
+    let baseQuery = `SELECT
     a.author,
     a.title,
     a.article_id,
@@ -29,7 +30,7 @@ exports.fetchArticles = async (topic) => {
     a.votes,
     a.article_img_url,
     count(c.comment_id) AS comment_count
-FROM
+    FROM
     articles AS a
     LEFT JOIN comments AS c ON c.article_id = a.article_id`;
 
@@ -42,9 +43,26 @@ FROM
 
   baseQuery += ` GROUP BY
     a.article_id
-ORDER BY
+    ORDER BY
     a.created_at DESC;`;
 
   const { rows } = await db.query(baseQuery, values);
   return rows;
+
+};
+
+exports.updateArticle = async (article_id, inc_votes) => {
+    let updateQuery = `UPDATE
+    articles
+SET
+    votes = votes + $1
+WHERE
+    article_id = $2
+    RETURNING *;`;
+    const { rows } = await db.query(updateQuery, [inc_votes, article_id]);
+    if (rows[0].length === 0) {
+      throw { status: 404, msg: "article does not exist" };
+    }
+    return rows[0];
+
 };
