@@ -113,4 +113,22 @@ exports.apiInfo = {
       body: "string",
     },
   },
+  "PATCH /api/articles/:article_id": {
+    description:
+      "Updates votes by increasing or decreasing the votes to the specified article and returns the updated article.",
+    queries: [],
+    exampleResponse: {
+      patchedArticle: {
+        comment_id: 17,
+        votes: 20,
+        created_at: "2020-03-14 17:02:00",
+        author: "icellusedkars",
+        body: "The owls are not what they seem.",
+        article_id: 9,
+      },
+    },
+    requiredBodyFormat: {
+      inc_votes: 100,
+    },
+  },
 };

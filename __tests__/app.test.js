@@ -248,8 +248,10 @@ describe("POST /api/articles/:article_id/comments", () => {
     };
 
     expect(insertedComment).toMatchObject(expected);
-    expect(typeof insertedComment.created_at).toBe('string');
-    expect(new Date(insertedComment.created_at).toString()).not.toEqual('Invalid Date');
+    expect(typeof insertedComment.created_at).toBe("string");
+    expect(new Date(insertedComment.created_at).toString()).not.toEqual(
+      "Invalid Date"
+    );
   });
 
   test("404: Check that article id exists", async () => {
@@ -270,28 +272,124 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.body.msg).toBe(expected);
   });
 
-  test('400: Should return 400 if the body is missing from body request', async () => {
-    const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send();
-    
+  test("400: Should return 400 if the body is missing from body request", async () => {
+    const response = await request(app).post("/api/articles/9/comments").send();
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('Request body is missing');
+    expect(response.body.msg).toBe("Request body is missing");
   });
-  test('400: Should return 400 if the author is missing from body request', async () => {
+  test("400: Should return 400 if the author is missing from body request", async () => {
     const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send([{ body: 'Amazing!' }]); 
-    
+      .post("/api/articles/9/comments")
+      .send([{ body: "Amazing!" }]);
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('Author is required');
+    expect(response.body.msg).toBe("Author is required");
   });
-  test('400: Should return 400 if the body is missing from body request', async () => {
+  test("400: Should return 400 if the body text is missing from body request", async () => {
     const response = await request(app)
-      .post('/api/articles/9/comments')
-      .send([{ author: 'butter_bridge' }]); 
-    
+      .post("/api/articles/9/comments")
+      .send([{ author: "butter_bridge" }]);
+
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe('body text is required');
+    expect(response.body.msg).toBe("body text is required");
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  const patch = {
+    inc_votes: 100,
+  };
+
+  test("Patched article should match the object structure and increase votes", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send(patch)
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: 'mitch',
+      author: 'butter_bridge',
+      body: 'Well? Think about it.',
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: 100,
+      article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+    };
+
+    expect(patchedArticle).toMatchObject(expected);
+  });
+  test("Patched article should decrease if passed a negative number", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: -100,
+      })
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: 'mitch',
+      author: 'butter_bridge',
+      body: 'Well? Think about it.',
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: -100,
+      article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+    };
+
+    expect(patchedArticle).toMatchObject(expected);
+  });
+  test("Should ignore properties other than inc_votes if provided", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: -999,
+        title: "One can think.",
+        invalid_property: 200,
+        invalid_property1: "title",
+      })
+      .expect(200);
+    const { patchedArticle } = response.body;
+
+    const expected = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: 'mitch',
+      author: 'butter_bridge',
+      body: 'Well? Think about it.',
+      created_at: "2020-06-06T09:10:00.000Z",
+      votes: -999,
+      article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+    };
+
+    expect(patchedArticle).toEqual(expected);
+  });
+  test("400: Return a 400 error for invalid vote input", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9")
+      .send({
+        inc_votes: "hey",
+      })
+      .expect(400);
+    const { msg } = response.body;
+
+    const expected = "Bad request";
+
+    expect(msg).toBe(expected);
+  });
+  test("404: Return a 404 error if article does not exist", async () => {
+    const response = await request(app)
+      .patch("/api/articles/9999999")
+      .send(patch)
+      .expect(404);
+    const { msg } = response.body;
+
+    const expected = "article does not exist";
+
+    expect(msg).toBe(expected);
   });
 });
