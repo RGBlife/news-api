@@ -293,6 +293,53 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("GET /api/articles (sorting queries)", () => {
+  test("Should sort articles by specified column in ascending order", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ sort_by: "author", order: "ASC" });
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toBeSortedBy("author", { ascending: true });
+  });
+  test("Should sort articles by specified column in descending order by default", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ sort_by: "author" });
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toBeSortedBy("author", { descending: true });
+  });
+  test("Should default to sorting by created_at in descending order if no queries are provided", async () => {
+    const response = await request(app).get("/api/articles").expect(200);
+    const {
+      body: { articles },
+    } = response;
+    expect(articles).toBeSortedBy("created_at", { descending: true });
+  });
+  test("400: Return an 400 error for invalid sort_by column", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ sort_by: "invalid_column" })
+      .expect(400);
+    const {
+      body: { msg },
+    } = response;
+    expect(msg).toBe("Invalid sort_by column");
+  });
+  test("400: Return an 400 error for invalid order query", async () => {
+    const response = await request(app)
+      .get("/api/articles")
+      .query({ order: "invalid_order" })
+      .expect(400);
+    const {
+      body: { msg },
+    } = response;
+    expect(msg).toBe("Order must be either ASC or DESC");
+  });
+});
 describe("GET /api/articles/:article_id (comment_count)", () => {
   test("Should return object article requested by id with the addition of comment_count", async () => {
     const {

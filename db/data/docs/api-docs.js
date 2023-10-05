@@ -62,8 +62,8 @@ exports.apiInfo = {
   },
   "GET /api/articles": {
     description:
-      "Retrieves all articles or filters articles by the topic specified in the query parameter. If the topic query is omitted, responds with all articles.",
-    queries: ["topic"],
+      "serves an array of articles sorted by created_at descending by default and includes sorting options, If the topic query is omitted, responds with all articles",
+    queries: ["sort_by", "order", "topic"],
     exampleResponse: {
       articles: [
         {

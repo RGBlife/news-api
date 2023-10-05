@@ -23,7 +23,7 @@ WHERE
   return rows[0];
 };
 
-exports.fetchArticles = async (topic) => {
+exports.fetchArticles = async (sort_by, order, topic) => {
   if (topic) {
     const topicQuery = `SELECT * FROM topics WHERE topics.slug = $1`;
     const topicCheck = await db.query(topicQuery, [topic]);
@@ -31,18 +31,30 @@ exports.fetchArticles = async (topic) => {
       return Promise.reject({ status: 404, msg: "Topic does not exist" });
   }
 
+  const validColumns = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "article_img_url",
+    "comment_count",
+  ];
+
   let baseQuery = `SELECT
-    a.author,
-    a.title,
-    a.article_id,
-    a.topic,
-    a.created_at,
-    a.votes,
-    a.article_img_url,
-    count(c.comment_id) AS comment_count
-    FROM
-    articles AS a
-    LEFT JOIN comments AS c ON c.article_id = a.article_id`;
+  a.author,
+  a.title,
+  a.article_id,
+  a.topic,
+  a.created_at,
+  a.votes,
+  a.article_img_url,
+  count(c.comment_id) AS comment_count
+  FROM
+  articles AS a
+  LEFT JOIN comments AS c ON c.article_id = a.article_id
+`;
 
   const values = [];
 
@@ -52,9 +64,31 @@ exports.fetchArticles = async (topic) => {
   }
 
   baseQuery += ` GROUP BY
-    a.article_id
-    ORDER BY
-    a.created_at DESC;`;
+  a.article_id`;
+
+  const sortOrder = ["ASC", "DESC"];
+  if (sort_by) {
+    if (validColumns.includes(sort_by)) {
+      baseQuery += ` ORDER BY a.${sort_by}`;
+    } else {
+      return Promise.reject({ status: 400, msg: "Invalid sort_by column" });
+    }
+  } else {
+    baseQuery += ` ORDER BY a.created_at`;
+  }
+
+  if (order) {
+    if (sortOrder.includes(order.toUpperCase())) {
+      baseQuery += ` ${order.toUpperCase()};`;
+    } else {
+      return Promise.reject({
+        status: 400,
+        msg: "Order must be either ASC or DESC",
+      });
+    }
+  } else {
+    baseQuery += ` DESC;`;
+  }
 
   const { rows } = await db.query(baseQuery, values);
   return rows;

@@ -15,8 +15,10 @@ exports.getArticleById = async ({ params: { article_id } }, res, next) => {
 
 exports.getArticles = async (req, res, next) => {
   try {
-    const { topic } = req.query;
-    const articles = await fetchArticles(topic);
+    const {
+      query: { sort_by, order, topic },
+    } = req;
+    const articles = await fetchArticles(sort_by, order, topic);
     res.status(200).send({ articles });
   } catch (err) {
     next(err);
