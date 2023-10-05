@@ -112,4 +112,52 @@ exports.apiInfo = {
       body: "string",
     },
   },
+
+  "GET /api/users": {
+    description: "Returns a list of all users.",
+    queries: [],
+    exampleResponse: {
+      users: [
+        {
+          username: "exampleUser1",
+          name: "Example User1",
+          avatar_url: "http://example.com/avatar1.jpg",
+        },
+        {
+          username: "exampleUser2",
+          name: "Example User2",
+          avatar_url: "http://example.com/avatar2.jpg",
+        },
+      ],
+    },
+    requiredBodyFormat: {},
+  },
+  "DELETE /api/comments/:comment_id": {
+    description:
+      "Deletes the specified comment by comment_id and responds with a status of 204 and no content.",
+    queries: [],
+    exampleResponse: {
+      status: 204,
+    },
+    requiredBodyFormat: {},
+  },
+
+  "PATCH /api/articles/:article_id": {
+    description:
+      "Updates votes by increasing or decreasing the votes to the specified article and returns the updated article.",
+    queries: [],
+    exampleResponse: {
+      patchedArticle: {
+        comment_id: 17,
+        votes: 20,
+        created_at: "2020-03-14 17:02:00",
+        author: "icellusedkars",
+        body: "The owls are not what they seem.",
+        article_id: 9,
+      },
+    },
+    requiredBodyFormat: {
+      inc_votes: 100,
+    },
+  },
 };
