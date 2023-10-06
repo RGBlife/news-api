@@ -108,3 +108,32 @@ WHERE
   }
   return rows[0];
 };
+
+exports.insertArticle = async (requestBody) => {
+  let { author, title, body, topic, article_img_url } = requestBody;
+  const timestamp = new Date();
+
+  if (!article_img_url) {
+    article_img_url = `https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2338&q=80`;
+  }
+
+  const values = [title, topic, author, body, timestamp, article_img_url];
+
+  let insertQuery = `
+    INSERT INTO
+    articles (title, topic, author, body, created_at, votes, article_img_url)
+    VALUES
+    (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        0,
+        $6
+        )
+        RETURNING *;
+        `;
+  const { rows } = await db.query(insertQuery, values);
+  return rows[0];
+};

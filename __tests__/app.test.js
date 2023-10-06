@@ -668,7 +668,7 @@ describe("PATCH /api/comments/:comment_id", () => {
   });
   test("400: Return a 400 error for invalid vote input", async () => {
     const response = await request(app)
-    .patch("/api/comments/9")
+      .patch("/api/comments/9")
       .send({
         inc_votes: "hey",
       })
@@ -689,5 +689,85 @@ describe("PATCH /api/comments/:comment_id", () => {
     const expected = "comment does not exist";
 
     expect(msg).toBe(expected);
+  });
+});
+
+describe("POST /api/articles", () => {
+  const posted = 
+    {
+      author: "butter_bridge",
+      title: "Testing",
+      body: "Amazing!",
+      topic: "mitch",
+    };
+  
+
+  test("Should return a 201 status", async () => {
+    const response = await request(app)
+      .post("/api/articles")
+      .send(posted);
+    expect(response.status).toBe(201);
+  });
+
+  test("Insert comment should match the object structure", async () => {
+    const response = await request(app)
+      .post("/api/articles")
+      .send(posted);
+    const { insertedArticle } = response.body;
+
+    const expected =     {
+      article_id: 14,
+      title: 'Testing',
+      topic: 'mitch',
+      author: 'butter_bridge',
+      body: 'Amazing!',
+      votes: 0,
+      article_img_url: 'https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2338&q=80',
+      comment_count: '0'
+    };
+
+    expect(insertedArticle).toMatchObject(expected);
+    expect(typeof insertedArticle.created_at).toBe("string");
+    expect(new Date(insertedArticle.created_at).toString()).not.toEqual(
+      "Invalid Date"
+    );
+  });
+
+  test("404: Check that username exists", async () => {
+    const response = await request(app)
+      .post("/api/articles")
+      .send({
+        author: "invalid_username",
+        title: "Testing",
+        body: "Amazing!",
+        topic: "mitch",
+      })
+      .expect(404);
+    const expected = "username does not exist.";
+    expect(response.body.msg).toBe(expected);
+  });
+
+  test("404: Check that topic exists", async () => {
+    const response = await request(app)
+      .post("/api/articles")
+      .send({
+        author: "butter_bridge",
+        title: "Testing",
+        body: "Amazing!",
+        topic: "invalid_topic",
+      })
+      .expect(400);
+    const expected = "topic does not exist";
+    expect(response.body.msg).toBe(expected);
+  });
+
+  test("400: Should return 400 if title or body text is missing from body request", async () => {
+    const response = await request(app).post("/api/articles").send({
+      author: "butter_bridge",
+      topic: "mitch",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body.msg).toBe("Request body format is incorrect, ensure it has author, title, body, topic");
   });
 });

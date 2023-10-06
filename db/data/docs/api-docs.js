@@ -92,6 +92,31 @@ exports.apiInfo = {
     },
     requiredBodyFormat: {},
   },
+  "POST /api/articles": {
+    description:
+      "Inserts an article, article_img_url is optional and will default if omitted",
+    queries: [],
+    exampleResponse: {
+      insertedArticle: {
+        article_id: 14,
+        title: "Testing",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "Amazing!",
+        votes: 0,
+        article_img_url:
+          "https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2338&q=80",
+        comment_count: "0",
+      },
+    },
+    requiredBodyFormat: {
+      author: "string",
+      title: "string",
+      body: "string",
+      topic: "string",
+      article_img_url: "optional, string",
+    },
+  },
 
   "POST /api/articles/:article_id/comments": {
     description:
@@ -154,7 +179,7 @@ exports.apiInfo = {
       },
     },
     requiredBodyFormat: {
-      inc_votes: 100,
+      inc_votes: "integar",
     },
   },
 
@@ -173,7 +198,7 @@ exports.apiInfo = {
       },
     },
     requiredBodyFormat: {
-      inc_votes: 100,
+      inc_votes: "integar",
     },
   },
   "GET /api/users/:username": {
