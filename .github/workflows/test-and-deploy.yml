@@ -34,4 +34,4 @@ jobs:
         needs: test # wait until test is successful before running this job
         steps:
           - name: Deploy to render
-            run: curl ${{RENDER_DEPLOY_HOOK_URL}}
+            run: curl $RENDER_DEPLOY_HOOK_URL
