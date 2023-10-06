@@ -23,7 +23,9 @@ WHERE
   return rows[0];
 };
 
-exports.fetchArticles = async (sort_by, order, topic) => {
+exports.fetchArticles = async (query, limit, offset) => {
+  const { sort_by, order, topic } = query;
+
   if (topic) {
     const topicQuery = `SELECT * FROM topics WHERE topics.slug = $1`;
     const topicCheck = await db.query(topicQuery, [topic]);
@@ -58,10 +60,18 @@ exports.fetchArticles = async (sort_by, order, topic) => {
 
   const values = [];
 
+  let countQuery = `SELECT COUNT(*) FROM articles AS a`;
+  const countValues = [];
+
   if (topic) {
     baseQuery += ` WHERE a.topic =$${values.length + 1}`;
     values.push(topic);
+    countQuery += ` WHERE a.topic = $1`;
+    countValues.push(topic);
   }
+
+  const countResult = await db.query(countQuery, countValues);
+  const totalCount = parseInt(countResult.rows[0].count);
 
   baseQuery += ` GROUP BY
   a.article_id`;
@@ -79,7 +89,7 @@ exports.fetchArticles = async (sort_by, order, topic) => {
 
   if (order) {
     if (sortOrder.includes(order.toUpperCase())) {
-      baseQuery += ` ${order.toUpperCase()};`;
+      baseQuery += ` ${order.toUpperCase()}`;
     } else {
       return Promise.reject({
         status: 400,
@@ -87,11 +97,13 @@ exports.fetchArticles = async (sort_by, order, topic) => {
       });
     }
   } else {
-    baseQuery += ` DESC;`;
+    baseQuery += ` DESC`;
   }
+  baseQuery += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
+  values.push(limit, offset);
 
   const { rows } = await db.query(baseQuery, values);
-  return rows;
+  return { articles: rows, totalCount };
 };
 
 exports.updateArticle = async (article_id, inc_votes) => {

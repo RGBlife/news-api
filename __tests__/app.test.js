@@ -170,7 +170,7 @@ describe("GET /api/articles", () => {
   test("Should return an array of articles", async () => {
     const {
       body: { articles },
-    } = await request(app).get("/api/articles");
+    } = await request(app).get("/api/articles?limit=20");
     const expected = {
       author: "icellusedkars",
       title: "Eight pug gifs that remind me of mitch",
@@ -364,7 +364,7 @@ describe("GET /api/articles/:article_id (comment_count)", () => {
 describe("GET /api/articles (topic query)", () => {
   test("Should return articles filtered by topic when topic query is provided", async () => {
     const response = await request(app)
-      .get("/api/articles?topic=mitch")
+      .get("/api/articles?topic=mitch&limit=20")
       .expect(200);
     const {
       body: { articles },
@@ -409,7 +409,7 @@ describe("GET /api/articles (topic query)", () => {
   });
 
   test("Should return all articles if passed an empty topic query ", async () => {
-    const response = await request(app).get("/api/articles?topic=").expect(200);
+    const response = await request(app).get("/api/articles?topic=&limit=20").expect(200);
     const {
       body: { articles },
     } = response;
@@ -769,5 +769,59 @@ describe("POST /api/articles", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("Request body format is incorrect, ensure it has author, title, body, topic");
+  });
+});
+
+describe.only("GET /api/articles (pagination)", () => {
+  test("Should return a 200 status", async () => {
+    const { status } = await request(app).get("/api/articles");
+    expect(status).toBe(200);
+  });
+
+  test("Should return an array of articles", async () => {
+    const {
+      body: { articles },
+    } = await request(app).get("/api/articles?limit=20");
+    const expected = {
+      author: "icellusedkars",
+      title: "Eight pug gifs that remind me of mitch",
+      article_id: 3,
+      topic: "mitch",
+      created_at: "2020-11-03T09:12:00.000Z",
+      votes: 0,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      comment_count: "2",
+    };
+
+    const correctStructure = articles.every((article) => {
+      return Object.keys(expected).every((key) => {
+        return article.hasOwnProperty(key);
+      });
+    });
+
+    articles.forEach((article) => {
+      expect(typeof article.author).toBe("string");
+      expect(typeof article.title).toBe("string");
+      expect(typeof article.article_id).toBe("number");
+      expect(typeof article.topic).toBe("string");
+      expect(typeof article.created_at).toBe("string");
+      expect(typeof article.votes).toBe("number");
+      expect(typeof article.article_img_url).toBe("string");
+      expect(typeof article.comment_count).toBe("string");
+    });
+
+    expect(correctStructure).toBe(true);
+    expect(articles[0]).toEqual(expected);
+    expect(articles).toHaveLength(13);
+    expect(articles).toBeSorted({ key: "created_at", descending: true });
+  });
+  test("Should return a 404 status if path doesn't exist", async () => {
+    const {
+      status,
+      body: { msg },
+    } = await request(app).get("/api/HELLO");
+    expect(status).toBe(404);
+    expect(msg).toBe("Path not found.");
   });
 });

@@ -20,11 +20,14 @@ exports.getArticleById = async ({ params: { article_id } }, res, next) => {
 
 exports.getArticles = async (req, res, next) => {
   try {
-    const {
-      query: { sort_by, order, topic },
-    } = req;
-    const articles = await fetchArticles(sort_by, order, topic);
-    res.status(200).send({ articles });
+    const { query } = req;
+
+    const limit = parseInt(query.limit) || 10;
+    const page = parseInt(query.p) || 1;
+    const offset = (page - 1) * limit;
+
+    const { articles, totalCount } = await fetchArticles(query, limit, offset);
+    res.status(200).send({ articles, totalCount });
   } catch (err) {
     next(err);
   }
@@ -49,7 +52,6 @@ exports.postArticle = async ({ body }, res, next) => {
     const { author, topic } = body;
     await fetchUserByUsername(author);
     await fetchTopicById(topic);
-
 
     const hasErrors = validatePostArticleBody(body);
     if (hasErrors) return next({ status: 400, msg: hasErrors });
