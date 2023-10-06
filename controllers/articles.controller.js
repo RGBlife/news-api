@@ -2,7 +2,12 @@ const {
   fetchArticleById,
   fetchArticles,
   updateArticle,
+  insertArticle,
 } = require("../models/articles.model");
+
+const { fetchUserByUsername } = require("../models/users.model");
+const { fetchTopicById } = require("../models/topics.model");
+const { validatePostArticleBody } = require("./utils");
 
 exports.getArticleById = async ({ params: { article_id } }, res, next) => {
   try {
@@ -36,5 +41,24 @@ exports.patchArticle = async (req, res, next) => {
     res.status(200).send({ patchedArticle });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.postArticle = async ({ body }, res, next) => {
+  try {
+    const { author, topic } = body;
+    await fetchUserByUsername(author);
+    await fetchTopicById(topic);
+
+
+    const hasErrors = validatePostArticleBody(body);
+    if (hasErrors) return next({ status: 400, msg: hasErrors });
+
+    const { article_id } = await insertArticle(body);
+    const insertedArticle = await fetchArticleById(article_id);
+
+    res.status(201).send({ insertedArticle });
+  } catch (error) {
+    next(error);
   }
 };
