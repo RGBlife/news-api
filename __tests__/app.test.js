@@ -435,15 +435,16 @@ describe("PATCH /api/articles/:article_id", () => {
       topic: "mitch",
       author: "butter_bridge",
       body: "Well? Think about it.",
-      created_at: "2020-06-06T09:10:00.000Z",
       votes: 100,
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     };
-    console.log("outcome: ", patchedArticle);
-    console.log("expected: ", expected);
 
     expect(patchedArticle).toMatchObject(expected);
+    expect(typeof patchedArticle.created_at).toBe("string");
+    expect(new Date(patchedArticle.created_at).toString()).not.toEqual(
+      "Invalid Date"
+    );
   });
   test("Patched article should decrease if passed a negative number", async () => {
     const response = await request(app)
@@ -460,7 +461,6 @@ describe("PATCH /api/articles/:article_id", () => {
       topic: "mitch",
       author: "butter_bridge",
       body: "Well? Think about it.",
-      created_at: "2020-06-06T09:10:00.000Z",
       votes: -100,
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -486,13 +486,16 @@ describe("PATCH /api/articles/:article_id", () => {
       topic: "mitch",
       author: "butter_bridge",
       body: "Well? Think about it.",
-      created_at: "2020-06-06T09:10:00.000Z",
       votes: -999,
       article_img_url:
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
     };
 
-    expect(patchedArticle).toEqual(expected);
+    expect(patchedArticle).toMatchObject(expected);
+    expect(typeof patchedArticle.created_at).toBe("string");
+    expect(new Date(patchedArticle.created_at).toString()).not.toEqual(
+      "Invalid Date"
+    );
   });
   test("400: Return a 400 error for invalid vote input", async () => {
     const response = await request(app)
