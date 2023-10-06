@@ -141,6 +141,22 @@ exports.apiInfo = {
     },
     requiredBodyFormat: {},
   },
+  "PATCH /api/comments/:comment_id": {
+    description:
+      "Updates votes by increasing or decreasing the votes to the specified article and returns the updated article.",
+    queries: [],
+    exampleResponse: {
+      updatedComment: {
+        article_id: 1,
+        author: "icellusedkars",
+        body: "Superficially charming",
+        votes: 100,
+      },
+    },
+    requiredBodyFormat: {
+      inc_votes: 100,
+    },
+  },
 
   "PATCH /api/articles/:article_id": {
     description:
