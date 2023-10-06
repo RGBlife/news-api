@@ -600,7 +600,93 @@ describe("GET /api/users/:username", () => {
     const {
       body: { msg },
     } = await request(app).get("/api/users/invalid_username").expect(404);
-    const expected = "username does not exist."
+    const expected = "username does not exist.";
+
+    expect(msg).toBe(expected);
+  });
+});
+
+describe("PATCH /api/comments/:comment_id", () => {
+  const patch = {
+    inc_votes: 100,
+  };
+
+  test("Patched comment should match the object structure and increase votes", async () => {
+    const response = await request(app)
+      .patch("/api/comments/9")
+      .send(patch)
+      .expect(200);
+    const { updatedComment } = response.body;
+
+    const expected = {
+      article_id: 1,
+      author: "icellusedkars",
+      body: "Superficially charming",
+      votes: 100,
+    };
+
+    expect(updatedComment).toMatchObject(expected);
+  });
+  test("Patched comment's votes should decrease if passed a negative number", async () => {
+    const response = await request(app)
+      .patch("/api/comments/9")
+      .send({
+        inc_votes: -100,
+      })
+      .expect(200);
+    const { updatedComment } = response.body;
+
+    const expected = {
+      article_id: 1,
+      author: "icellusedkars",
+      body: "Superficially charming",
+      votes: -100,
+    };
+
+    expect(updatedComment).toMatchObject(expected);
+  });
+  test("Should ignore properties other than inc_votes if provided", async () => {
+    const response = await request(app)
+      .patch("/api/comments/9")
+      .send({
+        inc_votes: -999,
+        title: "One can think.",
+        invalid_property: 200,
+        invalid_property1: "title",
+      })
+      .expect(200);
+    const { updatedComment } = response.body;
+
+    const expected = {
+      article_id: 1,
+      author: "icellusedkars",
+      body: "Superficially charming",
+      votes: -999,
+    };
+
+    expect(updatedComment).toMatchObject(expected);
+  });
+  test("400: Return a 400 error for invalid vote input", async () => {
+    const response = await request(app)
+    .patch("/api/comments/9")
+      .send({
+        inc_votes: "hey",
+      })
+      .expect(400);
+    const { msg } = response.body;
+
+    const expected = "Bad request";
+
+    expect(msg).toBe(expected);
+  });
+  test("404: Return a 404 error if article does not exist", async () => {
+    const response = await request(app)
+      .patch("/api/comments/9999999")
+      .send(patch)
+      .expect(404);
+    const { msg } = response.body;
+
+    const expected = "comment does not exist";
 
     expect(msg).toBe(expected);
   });

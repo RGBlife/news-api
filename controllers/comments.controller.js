@@ -3,6 +3,7 @@ const {
   insertComment,
   fetchCommentByCommentId,
   removeCommentById,
+  updateCommentById,
 } = require("../models/comments.model");
 const { fetchArticleById } = require("../models/articles.model");
 
@@ -52,6 +53,19 @@ exports.deleteCommentById = async (req, res, next) => {
     await fetchCommentByCommentId(comment_id);
     const deletedComment = await removeCommentById(comment_id);
     res.status(204).send();
+  } catch (error) {
+    next(error)
+  }
+};
+exports.patchCommentById = async (req, res, next) => {
+  try {
+    const {
+      params: { comment_id },
+      body: { inc_votes },
+    } = req;
+    await fetchCommentByCommentId(comment_id);
+    const updatedComment = await updateCommentById(comment_id, inc_votes);
+    res.status(200).send({updatedComment});
   } catch (error) {
     next(error)
   }
