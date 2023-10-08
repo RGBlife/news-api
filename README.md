@@ -59,14 +59,7 @@ The API provides access to a variety of news articles, allows for comments to be
     npm run seed
     ```
 5. **Run the Tests:**
-    To ensure all the tests succeed, you'll need to install devDependencies, jest (extensions to jest), pg-format by running the following commands.
-    ```
-    npm install jest-extended -D
-    npm install jest-sorted -D
-    npm install jest -D
-    npm install pg-format -D
-    ```
-    And finally to execute the test with the following command:
+    Execute the test with the following command:
     ```
     npm test
     ```
