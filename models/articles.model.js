@@ -70,8 +70,6 @@ exports.fetchArticles = async (query, limit, offset) => {
     countValues.push(topic);
   }
 
-  const countResult = await db.query(countQuery, countValues);
-  const totalCount = parseInt(countResult.rows[0].count);
 
   baseQuery += ` GROUP BY
   a.article_id`;
@@ -103,6 +101,8 @@ exports.fetchArticles = async (query, limit, offset) => {
   values.push(limit, offset);
 
   const { rows } = await db.query(baseQuery, values);
+  const countResult = await db.query(countQuery, countValues);
+  const totalCount = parseInt(countResult.rows[0].count);
   return { articles: rows, totalCount };
 };
 
@@ -121,17 +121,14 @@ WHERE
   return rows[0];
 };
 
-exports.insertArticle = async (requestBody) => {
-  let { author, title, body, topic, article_img_url } = requestBody;
+
+
+const FALLBACK_ARTICLE_IMG_URL = `https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2338&q=80`
+
+exports.insertArticle = async ({ article_img_url = FALLBACK_ARTICLE_IMG_URL, title, topic, author, body, votes}) => {
   const timestamp = new Date();
 
-  if (!article_img_url) {
-    article_img_url = `https://images.unsplash.com/photo-1495020689067-958852a7765e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2338&q=80`;
-  }
-
-  const values = [title, topic, author, body, timestamp, article_img_url];
-
-  let insertQuery = `
+  const insertQuery = `
     INSERT INTO
     articles (title, topic, author, body, created_at, votes, article_img_url)
     VALUES
@@ -146,6 +143,6 @@ exports.insertArticle = async (requestBody) => {
         )
         RETURNING *;
         `;
-  const { rows } = await db.query(insertQuery, values);
+  const { rows } = await db.query(insertQuery, [title, topic, author, body, timestamp, article_img_url]);
   return rows[0];
 };
