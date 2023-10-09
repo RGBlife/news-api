@@ -62,8 +62,8 @@ exports.apiInfo = {
   },
   "GET /api/articles": {
     description:
-      "serves an array of articles sorted by created_at descending by default and includes sorting options, If the topic query is omitted, responds with all articles",
-    queries: ["sort_by", "order", "topic"],
+      "serves an array of articles sorted by created_at descending by default and includes sorting options, If the topic query is omitted, responds with all articles limited by limit query or 10 by default. Supports pagination through 'limit' and 'p' queries.",
+    queries: ["sort_by", "order", "topic", "limit", "p"],
     exampleResponse: {
       articles: [
         {
@@ -89,6 +89,7 @@ exports.apiInfo = {
           comment_count: 1,
         },
       ],
+      total_count: 50,
     },
     requiredBodyFormat: {},
   },
