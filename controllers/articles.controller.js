@@ -27,7 +27,6 @@ exports.getArticles = async (req, res, next) => {
     const offset = (page - 1) * limit;
 
     const { articles, totalCount } = await fetchArticles(query, limit, offset);
-    // console.log({ articles, totalCount });
     res.status(200).send({ articles, totalCount });
   } catch (err) {
     next(err);
