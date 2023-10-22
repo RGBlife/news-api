@@ -98,6 +98,7 @@ exports.fetchArticles = async (query, limit, offset) => {
     baseQuery += ` DESC`;
   }
   baseQuery += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
+  
   values.push(limit, offset);
 
   const { rows } = await db.query(baseQuery, values);

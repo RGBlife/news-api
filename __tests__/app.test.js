@@ -131,7 +131,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     });
 
     expect(articleComments[0]).toEqual(expected);
-    expect(articleComments).toHaveLength(11);
+    expect(articleComments).toHaveLength(10);
   });
 
   test("Returns a status and error message when given an integar article id that doesn't exist", async () => {
@@ -792,5 +792,39 @@ describe("GET /api/articles (pagination)", () => {
     };
 
     expect(body).toMatchObject(expected);
+  });
+});
+describe("GET /api/articles/:article_id/comments (pagination)", () => {
+  test("Should return an array of comments from the selected article id limited to 2 results per page", async () => {
+    const { body } = await request(app).get("/api/articles/1/comments?limit=2");
+    const expected = {
+      articleComments: expect.arrayContaining([
+        expect.objectContaining({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          author: expect.any(String),
+          body: expect.any(String),
+          article_id: expect.any(Number),
+          created_at: expect.any(String),
+        }),
+      ]),
+    };
+
+    expect(body).toEqual(expected);
+    expect(body.articleComments.length).toBe(2)
+  });
+  test("404: Return invalid query if passed limit query as 0", async () => {
+    const { body } = await request(app).get("/api/articles/1/comments?limit=0").expect(400);
+    const expected = { msg: "Invalid query"
+    };
+
+    expect(body).toEqual(expected);
+  });
+  test("404: Return invalid query if passed p query as 0", async () => {
+    const { body } = await request(app).get("/api/articles/1/comments?p=0").expect(400);
+    const expected = { msg: "Invalid query"
+    };
+
+    expect(body).toEqual(expected);
   });
 });

@@ -1,6 +1,16 @@
 const db = require("../db/connection");
 
-exports.fetchCommentsByArticleId = async (article_id) => {
+
+exports.fetchCommentsByArticleId = async (article_id, { limit, p }) => {
+
+  const parsedLimit = limit ? parseInt(limit) : 10;
+  const page = p ? parseInt(p) : 1;
+
+
+  if (!parsedLimit || !page || limit == 0 || p == 0) throw { status: 400, msg: "Invalid query" };
+
+  const offset = (page - 1) * parsedLimit;
+
   let commentsQuery = `SELECT
     c.comment_id,
     c.votes,
@@ -17,8 +27,10 @@ GROUP By
     c.comment_id,
     a.article_id
 ORDER BY
-    c.created_at;`;
-  const { rows } = await db.query(commentsQuery, [article_id]);
+    c.created_at`;
+
+  commentsQuery += ` LIMIT $2 OFFSET $3`;
+  const { rows } = await db.query(commentsQuery, [article_id, parsedLimit, offset]);
   return rows;
 };
 

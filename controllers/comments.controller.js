@@ -15,9 +15,15 @@ exports.getCommentsByArticleId = async (req, res, next) => {
       params: { article_id },
     } = req;
 
+    const { query } = req;
+
+ 
+
     await fetchArticleById(article_id);
 
-    const articleComments = await fetchCommentsByArticleId(article_id);
+    const articleComments = await fetchCommentsByArticleId(article_id, query);
+
+    // destructure articles, totalCount
 
     res.status(200).send({ articleComments });
   } catch (error) {
@@ -54,7 +60,7 @@ exports.deleteCommentById = async (req, res, next) => {
     const deletedComment = await removeCommentById(comment_id);
     res.status(204).send();
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 exports.patchCommentById = async (req, res, next) => {
@@ -65,8 +71,8 @@ exports.patchCommentById = async (req, res, next) => {
     } = req;
     await fetchCommentByCommentId(comment_id);
     const updatedComment = await updateCommentById(comment_id, inc_votes);
-    res.status(200).send({updatedComment});
+    res.status(200).send({ updatedComment });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
