@@ -41,7 +41,7 @@ exports.insertComment = async (body, article_id) => {
   const { rows } = await db.query(insertQuery, [
     body[0].body,
     article_id,
-    body[0].author,
+    body[0].username,
     timestamp,
   ]);
   return rows[0];

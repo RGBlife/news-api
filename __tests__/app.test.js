@@ -218,7 +218,7 @@ describe("GET /api/articles", () => {
 describe("POST /api/articles/:article_id/comments", () => {
   const posted = [
     {
-      author: "butter_bridge",
+      username: "butter_bridge",
       body: "Amazing!",
     },
   ];
@@ -230,7 +230,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.status).toBe(201);
   });
 
-  test("Insert comment should match the object structure", async () => {
+  test("Insert comment match the object structure", async () => {
     const response = await request(app)
       .post("/api/articles/9/comments")
       .send(posted);
@@ -275,18 +275,18 @@ describe("POST /api/articles/:article_id/comments", () => {
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("Request body is missing");
   });
-  test("400: Should return 400 if the author is missing from body request", async () => {
+  test("400: Should return 400 if the username is missing from body request", async () => {
     const response = await request(app)
       .post("/api/articles/9/comments")
       .send([{ body: "Amazing!" }]);
 
     expect(response.status).toBe(400);
-    expect(response.body.msg).toBe("Author is required");
+    expect(response.body.msg).toBe("Username is required");
   });
   test("400: Should return 400 if the body text is missing from body request", async () => {
     const response = await request(app)
       .post("/api/articles/9/comments")
-      .send([{ author: "butter_bridge" }]);
+      .send([{ username: "butter_bridge" }]);
 
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("body text is required");

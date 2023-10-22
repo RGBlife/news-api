@@ -3,8 +3,8 @@ exports.validatePostBody = (body) => {
     return "Request body is missing";
   }
 
-  if (!body.author) {
-    return "Author is required";
+  if (!body.username) {
+    return "Username is required";
   }
 
   if (!body.body) {
