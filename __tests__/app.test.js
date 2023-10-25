@@ -216,12 +216,10 @@ describe("GET /api/articles", () => {
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
-  const posted = [
-    {
-      username: "butter_bridge",
-      body: "Amazing!",
-    },
-  ];
+  const posted = {
+    username: "butter_bridge",
+    body: "Amazing!",
+  };
 
   test("Should return a 201 status", async () => {
     const response = await request(app)
@@ -278,7 +276,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   test("400: Should return 400 if the username is missing from body request", async () => {
     const response = await request(app)
       .post("/api/articles/9/comments")
-      .send([{ body: "Amazing!" }]);
+      .send({ body: "Amazing!" });
 
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("Username is required");
@@ -286,7 +284,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   test("400: Should return 400 if the body text is missing from body request", async () => {
     const response = await request(app)
       .post("/api/articles/9/comments")
-      .send([{ username: "butter_bridge" }]);
+      .send({ username: "butter_bridge" });
 
     expect(response.status).toBe(400);
     expect(response.body.msg).toBe("body text is required");
@@ -811,19 +809,21 @@ describe("GET /api/articles/:article_id/comments (pagination)", () => {
     };
 
     expect(body).toEqual(expected);
-    expect(body.articleComments.length).toBe(2)
+    expect(body.articleComments.length).toBe(2);
   });
   test("404: Return invalid query if passed limit query as 0", async () => {
-    const { body } = await request(app).get("/api/articles/1/comments?limit=0").expect(400);
-    const expected = { msg: "Invalid query"
-    };
+    const { body } = await request(app)
+      .get("/api/articles/1/comments?limit=0")
+      .expect(400);
+    const expected = { msg: "Invalid query" };
 
     expect(body).toEqual(expected);
   });
   test("404: Return invalid query if passed p query as 0", async () => {
-    const { body } = await request(app).get("/api/articles/1/comments?p=0").expect(400);
-    const expected = { msg: "Invalid query"
-    };
+    const { body } = await request(app)
+      .get("/api/articles/1/comments?p=0")
+      .expect(400);
+    const expected = { msg: "Invalid query" };
 
     expect(body).toEqual(expected);
   });

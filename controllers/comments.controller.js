@@ -17,8 +17,6 @@ exports.getCommentsByArticleId = async (req, res, next) => {
 
     const { query } = req;
 
- 
-
     await fetchArticleById(article_id);
 
     const articleComments = await fetchCommentsByArticleId(article_id, query);
@@ -40,7 +38,7 @@ exports.postComment = async (req, res, next) => {
 
     await fetchArticleById(article_id);
 
-    const hasErrors = validatePostBody(body[0]);
+    const hasErrors = validatePostBody(body);
     if (hasErrors) return next({ status: 400, msg: hasErrors });
 
     const insertedComment = await insertComment(body, article_id);

@@ -134,7 +134,7 @@ exports.apiInfo = {
       },
     },
     requiredBodyFormat: {
-      author: "string",
+      username: "string",
       body: "string",
     },
   },
