@@ -27,7 +27,7 @@ GROUP By
     c.comment_id,
     a.article_id
 ORDER BY
-    c.created_at`;
+    c.created_at DESC`;
 
   commentsQuery += ` LIMIT $2 OFFSET $3`;
   const { rows } = await db.query(commentsQuery, [article_id, parsedLimit, offset]);

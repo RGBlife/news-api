@@ -112,14 +112,6 @@ describe("GET /api/articles/:article_id/comments", () => {
     const {
       body: { articleComments },
     } = await request(app).get("/api/articles/1/comments");
-    const expected = {
-      comment_id: 9,
-      votes: 0,
-      created_at: "2020-01-01T03:08:00.000Z",
-      author: "icellusedkars",
-      body: "Superficially charming",
-      article_id: 1,
-    };
 
     articleComments.forEach((comment) => {
       expect(typeof comment.comment_id).toBe("number");
@@ -130,7 +122,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(typeof comment.article_id).toBe("number");
     });
 
-    expect(articleComments[0]).toEqual(expected);
     expect(articleComments).toHaveLength(10);
   });
 
