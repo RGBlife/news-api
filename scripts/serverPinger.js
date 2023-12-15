@@ -3,7 +3,7 @@ const axios = require("axios");
 
 const pingServer = async () => {
   try {
-    const response = await axios.get("https://articlehub-ui.netlify.app/heartbeat");
+    const response = await axios.get("https://articlehub-ui.netlify.app/api/heartbeat");
     console.log("Server pinged successfully:", response.status);
   } catch (error) {
     console.error("Error pinging server:", error);
