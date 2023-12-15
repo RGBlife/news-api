@@ -4,6 +4,7 @@ const userRouter = require("./users-router");
 const articleRouter = require("./articles-router");
 const commentRouter = require("./comments-router");
 const topicRouter = require("./topics-router");
+const statusRouter = require("./status-router")
 
 
 apiRouter.use("/users", userRouter);
@@ -13,6 +14,8 @@ apiRouter.use("/topics", topicRouter);
 apiRouter.use("/comments", commentRouter);
 
 apiRouter.use("/articles", articleRouter);
+
+apiRouter.use("/heartbeat", statusRouter);
 
 apiRouter.get("/", (req, res, next) => {
   res.status(200).send({ apiInfo });

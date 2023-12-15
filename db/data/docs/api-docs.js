@@ -18,7 +18,7 @@ exports.apiInfo = {
   },
   "GET /api/articles/:article_id/comments": {
     description:
-      "Retrieves all comments associated to the article_id specified, ascending by created_at",
+      "Retrieves all comments associated to the article_id specified, descending by created_at",
     queries: [],
     exampleResponse: {
       topics: [
