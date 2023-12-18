@@ -1,7 +1,7 @@
 # Article Hub API 🗞️
 
 ## Overview
-Welcome to the Article Hub API! It’s a simple and easy-to-use service for accessing news articles and related data. It’s hosted online [here](https://article-hub-api.onrender.com) for anyone to use.
+Welcome to the Article Hub API! It’s a simple and easy-to-use service for accessing news articles and related data. It’s hosted online [here](https://article-hub-api.onrender.com/api) for anyone to use. (Please allow 1-2 minutes for the server to wake up)
 
 This project is part of my portfolio whilst enrolled on the Northcoders Software Development Bootcamp.
 
