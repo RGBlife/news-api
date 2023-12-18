@@ -3,8 +3,16 @@
 ## Overview
 Welcome to the Article Hub API! It’s a simple and easy-to-use service for accessing news articles and related data. It’s hosted online [here](https://article-hub-api.onrender.com) for anyone to use.
 
+This project is part of my portfolio whilst enrolled on the Northcoders Software Development Bootcamp.
+
 ## What’s Inside?
-The API provides access to a variety of news articles, allows for comments to be posted, and even lets you filter news by specific topics. It’s built using Node.js and Express and uses PostgreSQL for storing data.
+The API provides access to a variety of news articles, allows for comments to be posted, and even lets you filter news by specific topics. It’s built using Node.js and Express and uses PostgreSQL for storing data and tested using Jest using the Test-Driven Development approach.
+
+### Tech Stack
+- Node.js
+- Express
+- PostgreSQL
+- Jest & [Supertest](https://www.npmjs.com/package/supertest)
 
 ## Table of contents
 
@@ -65,6 +73,6 @@ The API provides access to a variety of news articles, allows for comments to be
     ```
 ## Additional Information
 
-Check out what API endpoints are available and how to use them by going to [API Info](https://article-hub-api.onrender.com/api/)
+Check out what API endpoints are available and how to use them by going to [API Info](https://article-hub-api.onrender.com/api/) (I recommend installing the popular [JDON viewer](https://chromewebstore.google.com/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh)  chrome extension that will display the JSON data in a more readable format.
 
 The API has been created using the [MVC design pattern](https://developer.mozilla.org/en-US/docs/Glossary/MVC) and the database is stored on [ElephantSQL](https://www.elephantsql.com/) and hosted using [Render](https://render.com/).
