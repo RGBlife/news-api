@@ -215,4 +215,30 @@ exports.apiInfo = {
     },
     requiredBodyFormat: {},
   },
+  "POST /api/topics": {
+    description: "Adds a new topic to the database.",
+    queries: [],
+    exampleResponse: {
+      topic: {
+        slug: "new-topic",
+        description: "A brief overview of the new topic.",
+      },
+    },
+    requiredBodyFormat: {
+      slug: "The unique identifier for the topic.",
+      description: "A brief description of the topic.",
+    },
+    possibleErrors: [
+      {
+        status: 400,
+        error: "Bad Request",
+        message: "Topic 'slug' already exists or request body is invalid.",
+      },
+      {
+        status: 500,
+        error: "Internal Server Error",
+        message: "Unexpected error occurred while adding the topic.",
+      },
+    ],
+  },
 };
